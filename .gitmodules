@@ -4,3 +4,6 @@
 [submodule "frontend"]
 	path = frontend
 	url = git@github.com:muhammad-deve/frontend.git
+[submodule "landing"]
+	path = landing
+	url = git@github.com:muhammad-deve/landing.git
