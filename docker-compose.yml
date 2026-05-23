@@ -17,12 +17,6 @@ services:
       - "3005:3000"
     restart: unless-stopped
 
-  server:
-    build: ./server
-    container_name: goport-server
-    ports:
-      - "8085:8080"
-    restart: unless-stopped
 
 volumes:
   goport_backend_data:
