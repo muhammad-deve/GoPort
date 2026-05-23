@@ -10,7 +10,14 @@ echo ">>> Creating required directories..."
 mkdir -p ./certbot/conf
 mkdir -p ./certbot/www
 
-echo ">>> Starting nginx without SSL for ACME challenge..."
+echo ">>> Stopping barbershop-nginx to free port 80/443..."
+docker stop barbershop-nginx
+
+echo ">>> Starting nginx with init config for ACME challenge..."
+# Temporarily use init config
+cp ./nginx/nginx-init.conf ./nginx/nginx.conf.bak
+cp ./nginx/nginx-init.conf ./nginx/nginx.conf
+
 docker compose up -d nginx
 
 echo ">>> Requesting SSL certificate from Let's Encrypt..."
@@ -21,9 +28,16 @@ docker compose run --rm certbot certonly \
   --agree-tos \
   --no-eff-email \
   -d $DOMAIN \
-  -d www.$DOMAIN
+  -d www.$DOMAIN \
+  -d back.$DOMAIN
 
-echo ">>> Restarting nginx with SSL..."
-docker compose restart nginx
+echo ">>> Restoring full nginx config..."
+cp ./nginx/nginx.conf.bak ./nginx/nginx.conf
+rm ./nginx/nginx.conf.bak
 
-echo ">>> Done! SSL certificate installed for $DOMAIN"
+echo ">>> Restarting all services..."
+docker compose down
+docker compose up -d
+
+echo ">>> Done! SSL certificate installed for $DOMAIN and back.$DOMAIN"
+echo ">>> Note: barbershop-nginx is stopped. Start it again if needed on different ports."

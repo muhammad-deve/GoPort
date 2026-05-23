@@ -5,8 +5,8 @@ services:
     build: ./nginx
     container_name: goport-nginx
     ports:
-      - "8443:443"
-      - "8880:80"
+      - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./certbot/conf:/etc/letsencrypt
