@@ -7,3 +7,6 @@
 [submodule "landing"]
 	path = landing
 	url = git@github.com:muhammad-deve/landing.git
+[submodule "server"]
+	path = server
+	url = git@github.com:muhammad-deve/server.git
