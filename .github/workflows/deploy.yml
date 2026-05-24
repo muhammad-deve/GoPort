@@ -19,4 +19,7 @@ jobs:
             git pull origin main
             git submodule sync
             git submodule update --init --remote --recursive
-            docker-compose up -d --build
+            docker-compose build
+            docker-compose stop || true
+            docker-compose rm -f || true
+            docker-compose up -d
