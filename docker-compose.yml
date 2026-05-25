@@ -6,6 +6,9 @@ services:
     container_name: goport-backend
     ports:
       - "8095:8090"
+      - "7000:7000"
+    environment:
+      - TCP_PORT=7000
     volumes:
       - goport_backend_data:/app/pb_data
     restart: unless-stopped
@@ -15,13 +18,6 @@ services:
     container_name: goport-landing
     ports:
       - "3005:3000"
-    restart: unless-stopped
-
-  server:
-    build: ./server
-    container_name: goport-server
-    ports:
-      - "8085:8080"
     restart: unless-stopped
 
 
