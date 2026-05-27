@@ -22,4 +22,4 @@ jobs:
             docker-compose build
             docker-compose stop || true
             docker-compose rm -f || true
-            docker-compose up -d
+            docker-compose up -d --remove-orphans
