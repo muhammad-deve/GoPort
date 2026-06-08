@@ -1,0 +1,17 @@
+<svg viewBox="90 150 490 300" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>GoPort icon</title>
+  <defs>
+    <linearGradient id="fg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0f4ff"/>
+      <stop offset="100%" stop-color="#c8d4ee"/>
+    </linearGradient>
+  </defs>
+  <path d="M218 174C162 174 118 218 118 274C118 330 162 374 218 374C258 374 292 352 308 320L308 274L230 274L230 306L272 306C260 326 240 338 218 338C182 338 154 310 154 274C154 238 182 210 218 210C236 210 252 218 262 230L290 204C272 186 246 174 218 174Z" fill="url(#fg)"/>
+  <circle cx="450" cy="274" r="100" fill="url(#fg)"/>
+  <circle cx="450" cy="274" r="62" fill="#05070b"/>
+  <circle cx="450" cy="274" r="46" fill="none" stroke="#00c8ff" stroke-width="2.5" opacity="0.8"/>
+  <circle cx="450" cy="274" r="28" fill="none" stroke="#00c8ff" stroke-width="1.5" opacity="0.55"/>
+  <circle cx="450" cy="274" r="9" fill="#00c8ff"/>
+  <line x1="100" y1="420" x2="555" y2="420" stroke="#00c8ff" stroke-width="2" opacity="0.55"/>
+  <path d="M548 414L562 420L548 426" fill="none" stroke="#00c8ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+</svg>

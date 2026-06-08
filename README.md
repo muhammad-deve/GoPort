@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="landing/public/goport-icon.svg" alt="GoPort" width="220" />
+<img src="docs/goport-icon.svg" alt="GoPort" width="220" />
 
 # GoPort
 
