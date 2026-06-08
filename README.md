@@ -1,8 +1,7 @@
 <div align="center">
 
-<img src="docs/goport-icon.svg" alt="GoPort" width="220" />
+<img src="docs/goport-logo.svg" alt="GoPort" width="460" />
 
-# GoPort
 
 **Expose localhost. Instantly.**
 

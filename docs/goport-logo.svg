@@ -1,0 +1,35 @@
+<svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GoPort" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <title>GoPort</title>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0e0e16"/>
+      <stop offset="100%" stop-color="#07070c"/>
+    </linearGradient>
+    <linearGradient id="word" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f4f7ff"/>
+      <stop offset="100%" stop-color="#c8d4ee"/>
+    </linearGradient>
+    <filter id="ring-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="2.2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Dark rounded panel so the logo looks good on white or dark backgrounds -->
+  <rect x="2" y="2" width="716" height="196" rx="34" fill="url(#panel)" stroke="#00c8ff" stroke-opacity="0.18"/>
+
+  <!-- Port target icon -->
+  <g transform="translate(112,100)" filter="url(#ring-glow)">
+    <circle r="58" fill="#0a0e16" stroke="#00c8ff" stroke-opacity="0.25" stroke-width="2"/>
+    <circle r="42" fill="none" stroke="#00c8ff" stroke-width="2.5" opacity="0.85"/>
+    <circle r="26" fill="none" stroke="#00c8ff" stroke-width="1.6" opacity="0.6"/>
+    <circle r="9" fill="#00c8ff"/>
+  </g>
+
+  <!-- Connecting line + arrow, echoing the brand mark -->
+  <line x1="184" y1="100" x2="214" y2="100" stroke="#00c8ff" stroke-width="2.5" opacity="0.6"/>
+  <path d="M206 92 L220 100 L206 108" fill="none" stroke="#00c8ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+
+  <!-- Wordmark: GoPort -->
+  <text x="248" y="132" font-size="96" font-weight="800" letter-spacing="-2" fill="url(#word)">Go<tspan fill="#30f294">Port</tspan></text>
+</svg>
