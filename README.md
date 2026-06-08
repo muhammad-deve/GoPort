@@ -1,6 +1,9 @@
 <div align="center">
 
-<img src="docs/goport-logo.svg" alt="GoPort" width="460" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/goport-logo.svg" />
+  <img src="docs/goport-logo-dark-text.svg" alt="GoPort" width="420" />
+</picture>
 
 
 **Expose localhost. Instantly.**
