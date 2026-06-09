@@ -114,15 +114,6 @@ goport --version
 ```
 
 You should see the installed GoPort version printed to the terminal.
-```
-
-### Why TCP + yamux instead of a plain HTTP proxy?
-
-A plain HTTP proxy opens a new connection per request and struggles with anything that isn't a simple request/response (WebSockets, streaming, keep-alive). By multiplexing over one long-lived TCP connection, GoPort handles concurrency cleanly, survives NAT, and supports upgrade-based protocols. The CLI even detects `Upgrade` requests (like WebSockets) and switches to a raw bidirectional copy so those work too.
-
-One nice detail: GoPort preserves the original public `Host` header all the way to your local app. Tools like Swagger and OpenAPI build absolute URLs from that header, so keeping it intact means "Try it out" buttons and generated links keep working — the same way they do on ngrok.
-
----
 
 ---
 
@@ -132,11 +123,11 @@ One nice detail: GoPort preserves the original public `Host` header all the way 
 
 GoPort uses a persistent TCP connection between the CLI and the server, with request multiplexing powered by yamux.
 
-This approach allows multiple requests to share a single connection, reducing connection overhead and improving performance under load. It also works reliably behind NAT and firewalls because all traffic originates from the client.
+A plain HTTP proxy opens a new connection per request and struggles with protocols that require long-lived connections, such as WebSockets and streaming responses. By multiplexing multiple streams over a single TCP connection, GoPort handles concurrency efficiently while remaining reliable behind NAT and firewalls.
 
-Unlike simple reverse proxies, GoPort can efficiently handle many concurrent requests without repeatedly opening new connections.
+The CLI also detects HTTP upgrade requests and switches to raw bidirectional forwarding when necessary, allowing WebSocket-based applications to work seamlessly.
 
-One additional benefit is that GoPort preserves the original `Host` header when forwarding requests to your local application, making it compatible with frameworks and tools that rely on host-based routing.
+One additional benefit is that GoPort preserves the original public `Host` header when forwarding requests to your local application. This keeps tools such as Swagger UI, OpenAPI, and host-based routing frameworks working exactly as they would in production.
 
 ## Tech Stack
 
@@ -149,4 +140,3 @@ One additional benefit is that GoPort preserves the original `Host` header when 
 ## License
 
 GoPort is released under the [MIT License](LICENSE).
-
