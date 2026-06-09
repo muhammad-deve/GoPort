@@ -15,6 +15,18 @@ Make your local projects accessible from anywhere with a secure public URL — a
 
 ---
 
+## Features
+
+* Instant public HTTPS URLs for local applications
+* Custom subdomains with `--custom`
+* Generate new URLs with `--reset`
+* Built-in dashboard for monitoring requests and tunnel status
+* Real-time HTTP request and response inspection
+* Works behind NAT and firewalls without port forwarding
+* Efficient TCP multiplexing powered by yamux
+* Self-hosted and fully open source
+
+
 ## What is GoPort?
 
 GoPort is an open-source alternative to ngrok and jprq that turns local applications into publicly accessible HTTPS endpoints.
