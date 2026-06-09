@@ -29,7 +29,7 @@ Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort give
    goport auth <token>
    ```
 
-   Authenticate the CLI with your GoPort account.
+   Authenticate the CLI with your GoPort account and connect it to your server.
 
 2. **Start a tunnel**
 
@@ -37,15 +37,15 @@ Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort give
    goport http 8080
    ```
 
-   The CLI opens a secure outbound connection to the GoPort server and receives a public HTTPS URL.
+   GoPort opens a secure outbound connection and instantly creates a public HTTPS URL for your local application.
 
-3. **Choose a custom subdomain**
+3. **Use a custom subdomain**
 
    ```bash
    goport http 8080 --custom myapp
    ```
 
-   Request a specific subdomain for your tunnel:
+   Request a memorable URL for your tunnel:
 
    ```txt
    https://myapp.goport.uz
@@ -57,26 +57,30 @@ Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort give
    goport http 8080 --reset
    ```
 
-   Discards your current subdomain and creates a completely new public URL.
+   Discards the current subdomain and creates a brand-new public URL.
 
-   ```txt
-   Before: https://abc123.goport.uz
-   After:  https://xyz789.goport.uz
-   ```
+5. **Monitor traffic in real time**
 
-5. **Route traffic to localhost**
+   After connecting, GoPort launches a local dashboard where you can inspect incoming requests, responses, tunnel status, and latency.
 
-   When someone visits your public URL, GoPort forwards the request through the tunnel to your local application.
+   <div align="center">
+     <img src="docs/dashboard.png" alt="GoPort Dashboard" width="900" />
+   </div>
 
-6. **Disconnect cleanly**
+6. **Route traffic to localhost**
 
-   Press `Ctrl+C` to close the tunnel. GoPort automatically removes the active session.
+   When someone visits your public URL, GoPort forwards the request through a secure tunnel directly to your local application.
+
+7. **Disconnect cleanly**
+
+   Press `Ctrl+C` at any time to close the tunnel. GoPort automatically removes the active session and releases the URL.
 
 <div align="center">
 
-<img src="docs/architecture.svg" alt="GoPort architecture" width="800" />
+<img src="docs/architecture.svg" alt="GoPort Architecture" width="800" />
 
 </div>
+
 
 
 
