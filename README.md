@@ -5,7 +5,7 @@
 
 **Expose localhost. Instantly.**
 
-A self-hosted tunneling tool for developers — turn `localhost:8080` into a public HTTPS URL like `https://abc123.goport.uz` with a single command.
+Make your local projects accessible from anywhere with a secure public URL — all with a single command.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-30f294.svg)](LICENSE)
 [![Go](https://img.shields.io/badge/Go-1.23-00ADD8.svg?logo=go&logoColor=white)](https://go.dev)
