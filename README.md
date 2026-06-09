@@ -21,6 +21,42 @@ GoPort is an open-source alternative to ngrok and jprq that turns local applicat
 
 Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort gives your localhost a public URL in seconds — without port forwarding, firewall changes, or a public IP.
 
+## Installation
+
+### macOS
+
+Install via Homebrew:
+
+```bash
+brew tap muhammad-deve/goport
+brew install goport
+```
+
+### Windows
+
+Install via Chocolatey:
+
+```powershell
+choco install goport
+```
+
+### Linux
+
+Install with the official installation script:
+
+```bash
+curl -fsSL https://goport.uz/install.sh | sh
+```
+
+### Verify Installation
+
+```bash
+goport --version
+```
+
+You should see the installed GoPort version printed to the terminal.
+
+
 ## How it works
 
 1. **Authenticate the CLI**
