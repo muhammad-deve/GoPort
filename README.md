@@ -21,6 +21,10 @@ GoPort is an open-source alternative to ngrok and jprq that turns local applicat
 
 Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort gives your localhost a public URL in seconds — without port forwarding, firewall changes, or a public IP.
 
+Built for developers, GoPort makes it easy to expose services running on your machine while keeping setup simple and infrastructure under your control. It uses a persistent multiplexed connection to efficiently route traffic between the public internet and your local application.
+
+Unlike many hosted tunneling services, GoPort can be fully self-hosted, allowing teams to manage their own tunnels, domains, and infrastructure without vendor lock-in.
+
 
 ## How it works
 
