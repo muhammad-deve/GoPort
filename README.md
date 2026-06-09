@@ -21,17 +21,6 @@ GoPort is an open-source alternative to ngrok and jprq that turns local applicat
 
 Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort gives your localhost a public URL in seconds — without port forwarding, firewall changes, or a public IP.
 
-## Features
-
-* Instant public HTTPS URLs for local applications
-* Custom subdomains with `--custom`
-* Generate new URLs with `--reset`
-* Built-in dashboard for monitoring requests and tunnel status
-* Real-time HTTP request and response inspection
-* Works behind NAT and firewalls without port forwarding
-* Efficient TCP multiplexing powered by yamux
-* Self-hosted and fully open source
-
 ## How it works
 
 1. **Authenticate the CLI**
