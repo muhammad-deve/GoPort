@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="380" viewBox="0 0 840 380">
+  <defs>
+    <style>
+      .bg { fill: #1e1e2e; }
+      .titlebar { fill: #181825; }
+      .text-dim { fill: #6c7086; font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 14px; }
+      .text-bright { fill: #cdd6f4; font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 14px; }
+      .text-green { fill: #a6e3a1; font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 14px; }
+      .text-bold { fill: #cdd6f4; font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 14px; font-weight: bold; }
+      .text-title { fill: #6c7086; font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 13px; }
+      .text-header { fill: #cdd6f4; font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 14px; font-weight: bold; }
+      .text-small { fill: #6c7086; font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 13px; }
+      .dot-red { fill: #f38ba8; }
+      .dot-yellow { fill: #f9e2af; }
+      .dot-green { fill: #a6e3a1; }
+    </style>
+  </defs>
+
+  <!-- Window background -->
+  <rect class="bg" width="840" height="380" rx="10" ry="10"/>
+
+  <!-- Title bar -->
+  <rect class="titlebar" width="840" height="40" rx="10" ry="10"/>
+  <rect class="titlebar" x="0" y="30" width="840" height="10"/>
+
+  <!-- Traffic light dots -->
+  <circle class="dot-red" cx="24" cy="20" r="6"/>
+  <circle class="dot-yellow" cx="44" cy="20" r="6"/>
+  <circle class="dot-green" cx="64" cy="20" r="6"/>
+
+  <!-- Title bar text -->
+  <text class="text-title" x="90" y="24">terminal</text>
+
+  <!-- Command line -->
+  <text class="text-dim" x="30" y="80">$</text>
+  <text class="text-bold" x="50" y="80">goport http 8080</text>
+
+  <!-- Info rows -->
+  <text class="text-dim" x="30" y="120">Dashboard</text>
+  <text class="text-bold" x="200" y="120">http://127.0.0.1:4040</text>
+
+  <text class="text-dim" x="30" y="148">Region</text>
+  <text class="text-bold" x="200" y="148">Europe (eu)</text>
+
+  <text class="text-dim" x="30" y="176">Status</text>
+  <text class="text-green" x="200" y="176">online</text>
+  <text class="text-dim" x="270" y="176">(140ms)</text>
+
+  <text class="text-dim" x="30" y="204">Forwarding</text>
+  <text class="text-green" x="200" y="204">https://abc123.goport.uz</text>
+  <text class="text-dim" x="448" y="204">→</text>
+  <text class="text-bold" x="470" y="204">localhost:8080</text>
+
+  <!-- HTTP Requests header -->
+  <text class="text-header" x="30" y="248">HTTP Requests</text>
+  <text class="text-dim" x="30" y="268">─────────────</text>
+
+  <!-- Request rows -->
+  <text class="text-dim" x="30" y="296">14:32:15</text>
+  <text class="text-dim" x="120" y="296">GET</text>
+  <text class="text-bold" x="200" y="296">/api/users</text>
+  <text class="text-green" x="420" y="296">200 OK</text>
+
+  <text class="text-dim" x="30" y="320">14:32:08</text>
+  <text class="text-dim" x="120" y="320">POST</text>
+  <text class="text-bold" x="200" y="320">/api/auth/login</text>
+  <text class="text-green" x="420" y="320">201 Created</text>
+
+  <text class="text-dim" x="30" y="344">14:31:52</text>
+  <text class="text-dim" x="120" y="344">PUT</text>
+  <text class="text-bold" x="200" y="344">/api/users/42</text>
+  <text class="text-green" x="420" y="344">200 OK</text>
+
+  <text class="text-dim" x="30" y="368">14:31:45</text>
+  <text class="text-dim" x="120" y="368">DELETE</text>
+  <text class="text-bold" x="200" y="368">/api/posts/17</text>
+  <text class="text-green" x="420" y="368">200 OK</text>
+</svg>
