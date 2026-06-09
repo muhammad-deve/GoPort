@@ -131,11 +131,11 @@ One additional benefit is that GoPort preserves the original public `Host` heade
 
 ## Tech Stack
 
-* **Go 1.23** — CLI and tunnel engine
-* **Cobra** — Command-line interface
-* **yamux** — TCP stream multiplexing
-* **PocketBase** — Authentication, tunnel management, and subdomain registry
-* **Next.js** — Website and dashboard
+- **[Go](https://go.dev)** — CLI and tunnel engine
+- **[Cobra](https://github.com/spf13/cobra)** — Command-line interface
+- **[yamux](https://github.com/hashicorp/yamux)** — TCP stream multiplexing
+- **[PocketBase](https://pocketbase.io)** — Authentication, tunnel management, and subdomain registry
+- **[Next.js](https://nextjs.org)** — Website and dashboard
 
 ## License
 
