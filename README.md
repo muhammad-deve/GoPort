@@ -64,7 +64,7 @@ Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort give
    After connecting, GoPort launches a local dashboard where you can inspect incoming requests, responses, tunnel status, and latency.
 
    <div align="center">
-     <img src="docs/dashboard.png" alt="GoPort Dashboard" width="900" />
+     <img src="docs/terminal-preview.svg" alt="GoPort Dashboard" width="800" />
    </div>
 
 6. **Route traffic to localhost**
