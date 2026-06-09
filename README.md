@@ -94,29 +94,38 @@ One nice detail: GoPort preserves the original public `Host` header all the way 
 
 ## Installation
 
-You need [Go 1.23+](https://go.dev/dl/) to build the CLI.
+### 🍎 macOS
 
-### Install the CLI
+Install via Homebrew:
 
 ```bash
-# Clone the repo
-git clone https://github.com/muhammad-deve/GoPort.git
-cd GoPort/server
-
-# Build and install the goport binary onto your PATH
-make install      # builds the dashboard + binary into $GOPATH/bin
-
-# Or, if you just want the binary without rebuilding the web dashboard:
-make install-go
+brew tap muhammad-deve/goport
+brew install goport
 ```
 
-After that, make sure `$GOPATH/bin` is on your `PATH`, then check it works:
+### 🪟 Windows
+
+Install via Chocolatey:
+
+```bash
+choco install goport
+```
+
+### 🐧 Linux
+
+Install with the official installation script:
+
+```bash
+curl -fsSL https://goport.uz/install.sh | sh
+```
+
+### Verify Installation
 
 ```bash
 goport --version
 ```
 
-> **Windows note:** the Makefile builds `goport.exe`. If you don't have `make`, you can build directly with `go build -o goport.exe .` inside the `server/` folder.
+You should see the installed GoPort version printed to the terminal.
 
 ### Point the CLI at a server
 
