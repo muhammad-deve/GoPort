@@ -128,7 +128,7 @@ One nice detail: GoPort preserves the original public `Host` header all the way 
 
 ## Installation
 
-### 🍎 macOS
+### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" width="18" height="18" /> macOS
 
 Install via Homebrew:
 
@@ -137,7 +137,7 @@ brew tap muhammad-deve/goport
 brew install goport
 ```
 
-### 🪟 Windows
+### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows11/windows11-original.svg" width="18" height="18" /> Windows
 
 Install via Chocolatey:
 
@@ -145,7 +145,7 @@ Install via Chocolatey:
 choco install goport
 ```
 
-### 🐧 Linux
+### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="18" height="18" /> Linux
 
 Install with the official installation script:
 
