@@ -24,21 +24,30 @@ Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort give
 
 ## How it works
 
+1. **Start a tunnel**
+   Run `goport http 8080`. The GoPort CLI opens a secure outbound connection to the server, making it work behind NAT and firewalls without port forwarding.
+
+2. **Get a public URL**
+   The server assigns a subdomain and returns a public HTTPS URL for your local application.
+
+3. **Establish a multiplexed connection**
+   GoPort uses [yamux](https://github.com/hashicorp/yamux) to multiplex multiple requests over a single persistent TCP connection.
+
+4. **Route incoming traffic**
+   When a request arrives, the server identifies the target tunnel using the request's host and opens a new stream.
+
+5. **Forward to your application**
+   The CLI receives the stream, forwards the request to your local application, and sends the response back through the tunnel.
+
+6. **Clean up automatically**
+   When the CLI disconnects, the tunnel is removed immediately and no stale sessions remain.
+
 <div align="center">
 
-<img src="docs/architecture.svg" alt="GoPort architecture animation" width="800" />
+<img src="docs/architecture.svg" alt="GoPort architecture" width="800" />
 
 </div>
 
-The flow, end to end:
-
-1. **You run the CLI.** `goport http 8080` dials the GoPort server on TCP port `7000`. The CLI is always the one that initiates — the server never connects back to you, which is exactly why this works behind NAT and firewalls.
-2. **Handshake.** Over that connection the CLI sends a small JSON message (`{ type, port, subdomain, reset }`). The server replies with your assigned `{ subdomain, url }`.
-3. **Multiplexing kicks in.** Both sides wrap the same TCP connection with [yamux](https://github.com/hashicorp/yamux). The server side becomes `yamux.Server()`, the CLI side becomes `yamux.Client()`. yamux adds a small frame header (with a stream ID) to every chunk of data, so many requests can share one TCP pipe without their bytes ever mixing together.
-4. **The server remembers you in memory.** It keeps a map of `subdomain → session`. The database is only touched once, during registration. All live routing is in-memory, so it stays fast.
-5. **A browser hits your URL.** When a request arrives for `abc123.goport.uz`, the server reads the `Host` header, looks up your session, and calls `session.Open()` to create a fresh stream.
-6. **The CLI answers.** That `Open()` unblocks an `Accept()` on the CLI side. The CLI dials your real local app (`127.0.0.1:8080`), forwards the HTTP request, reads the response, and copies it back through the stream.
-7. **You disconnect.** When you press `Ctrl+C`, the connection closes and the server drops your session from its map. No stale tunnels left behind.
 
 ### Why TCP + yamux instead of a plain HTTP proxy?
 
