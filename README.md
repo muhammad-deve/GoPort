@@ -77,8 +77,6 @@ Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort give
 
 <div align="center">
 
-<img src="docs/architecture.svg" alt="GoPort Architecture" width="800" />
-
 </div>
 
 
