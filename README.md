@@ -21,63 +21,56 @@ GoPort is an open-source alternative to ngrok and jprq that turns local applicat
 
 Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort gives your localhost a public URL in seconds — without port forwarding, firewall changes, or a public IP.
 
-
 ## How it works
 
 1. **Authenticate the CLI**
-   Connect the CLI to your GoPort account/server using an auth token.
 
    ```bash
    goport auth <token>
    ```
 
-   > Authentication format is still being finalized. GoPort will use a simple token-based auth flow, not JWT.
+   Authenticate the CLI with your GoPort account.
 
 2. **Start a tunnel**
-   Run GoPort with the local port you want to expose.
 
    ```bash
    goport http 8080
    ```
 
-   The CLI opens an outbound connection to the GoPort server, so it works behind NAT and firewalls without port forwarding.
+   The CLI opens a secure outbound connection to the GoPort server and receives a public HTTPS URL.
 
-3. **Get a public URL**
-   GoPort assigns a public HTTPS URL for your local application.
-
-   ```txt
-   https://abc123.goport.uz
-   ```
-
-4. **Use a custom subdomain**
-   You can request your own subdomain with `--custom`.
+3. **Choose a custom subdomain**
 
    ```bash
    goport http 8080 --custom myapp
    ```
 
-   This gives your local app a cleaner URL:
+   Request a specific subdomain for your tunnel:
 
    ```txt
    https://myapp.goport.uz
    ```
 
-5. **Reset an existing tunnel name**
-   If a subdomain is already linked to an old session, use `--reset` to reclaim it.
+4. **Generate a new URL**
 
    ```bash
-   goport http 8080 --custom myapp --reset
+   goport http 8080 --reset
    ```
 
-6. **Route traffic to localhost**
-   When someone visits your public URL, the GoPort server routes the request through the tunnel to your local app running on:
+   Discards your current subdomain and creates a completely new public URL.
 
    ```txt
-   127.0.0.1:8080
+   Before: https://abc123.goport.uz
+   After:  https://xyz789.goport.uz
    ```
 
-7. **Disconnect cleanly**
-   When you press `Ctrl+C`, the connection closes and GoPort removes the tunnel automatically.
+5. **Route traffic to localhost**
+
+   When someone visits your public URL, GoPort forwards the request through the tunnel to your local application.
+
+6. **Disconnect cleanly**
+
+   Press `Ctrl+C` to close the tunnel. GoPort automatically removes the active session.
 
 <div align="center">
 
