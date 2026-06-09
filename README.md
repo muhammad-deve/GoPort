@@ -17,19 +17,17 @@ Make your local projects accessible from anywhere with a secure public URL — a
 
 ## What is GoPort?
 
-GoPort is an open-source alternative to ngrok. You run a local server (a web app, an API, a webhook receiver) and GoPort gives it a public address that anyone on the internet can reach. No port forwarding, no firewall rules, no public IP required.
+GoPort is an open-source alternative to ngrok that turns local applications into publicly accessible HTTPS endpoints.
 
-The difference from most "expose my port" scripts: GoPort uses **real TCP multiplexing**, the same approach ngrok uses. A single persistent TCP connection is opened from your machine to the server, and every incoming request is carried over that one pipe as an independent stream. That makes it fast, reliable behind NAT, and able to handle many concurrent requests without opening new connections each time.
+Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort gives your localhost a public URL in seconds — without port forwarding, firewall changes, or a public IP.
 
-It comes with three pieces:
+### Components
 
-| Component | Folder | What it does |
-|-----------|--------|--------------|
-| **CLI** (`goport`) | [`server/`](server) | The binary you install and run locally. Opens the tunnel and forwards traffic to your app. Ships with a live web dashboard. |
-| **Backend** | [`backend/`](backend) | The public-facing server. Accepts CLI connections, assigns subdomains, and routes browser traffic into the right tunnel. Built on PocketBase. |
-| **Landing** | [`landing/`](landing) | The `goport.uz` marketing site (Next.js). |
-
----
+| Component | Folder | Purpose |
+|-----------|--------|---------|
+| **CLI** (`goport`) | [`server/`](server) | Creates tunnels and forwards traffic from your machine. |
+| **Backend** | [`backend/`](backend) | Routes incoming requests to the correct tunnel. |
+| **Landing** | [`landing/`](landing) | Website and documentation. |
 
 ## How it works
 
