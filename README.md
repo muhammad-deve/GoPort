@@ -7,8 +7,8 @@
 
 Make your local projects accessible from anywhere with a secure public URL — all with a single command.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-30f294.svg)](LICENSE)
 [![Go](https://img.shields.io/badge/Go-1.23-00ADD8.svg?logo=go&logoColor=white)](https://go.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-30f294.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-00c8ff.svg)](#contributing)
 
 </div>
@@ -21,40 +21,9 @@ GoPort is an open-source alternative to ngrok and jprq that turns local applicat
 
 Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort gives your localhost a public URL in seconds — without port forwarding, firewall changes, or a public IP.
 
-## Installation
+Built for developers, GoPort makes it easy to expose services running on your machine while keeping setup simple and infrastructure under your control. It uses a persistent multiplexed connection to efficiently route traffic between the public internet and your local application.
 
-### macOS
-
-Install via Homebrew:
-
-```bash
-brew tap muhammad-deve/goport
-brew install goport
-```
-
-### Windows
-
-Install via Chocolatey:
-
-```powershell
-choco install goport
-```
-
-### Linux
-
-Install with the official installation script:
-
-```bash
-curl -fsSL https://goport.uz/install.sh | sh
-```
-
-### Verify Installation
-
-```bash
-goport --version
-```
-
-You should see the installed GoPort version printed to the terminal.
+Unlike many hosted tunneling services, GoPort can be fully self-hosted, allowing teams to manage their own tunnels, domains, and infrastructure without vendor lock-in.
 
 
 ## How it works
@@ -115,17 +84,6 @@ You should see the installed GoPort version printed to the terminal.
 
 </div>
 
-
-
-
-### Why TCP + yamux instead of a plain HTTP proxy?
-
-A plain HTTP proxy opens a new connection per request and struggles with anything that isn't a simple request/response (WebSockets, streaming, keep-alive). By multiplexing over one long-lived TCP connection, GoPort handles concurrency cleanly, survives NAT, and supports upgrade-based protocols. The CLI even detects `Upgrade` requests (like WebSockets) and switches to a raw bidirectional copy so those work too.
-
-One nice detail: GoPort preserves the original public `Host` header all the way to your local app. Tools like Swagger and OpenAPI build absolute URLs from that header, so keeping it intact means "Try it out" buttons and generated links keep working — the same way they do on ngrok.
-
----
-
 ## Installation
 
 ### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" width="18" height="18" /> macOS
@@ -161,155 +119,27 @@ goport --version
 
 You should see the installed GoPort version printed to the terminal.
 
-### Point the CLI at a server
-
-By default the CLI connects to the hosted server at `goport.uz`. To use your own self-hosted backend, set these environment variables before running:
-
-```bash
-export GOPORT_SERVER_ADDR="your-server.com:7000"   # where the CLI dials
-export GOPORT_DOMAIN="your-server.com"             # used to build your public URL
-```
-
 ---
 
-## Usage
+## Technical Details
 
-### Expose an HTTP port
+### Why TCP + yamux instead of a plain HTTP proxy?
 
-```bash
-goport http 8080
-```
+GoPort uses a persistent TCP connection between the CLI and the server, with request multiplexing powered by yamux.
 
-You'll get a live terminal dashboard like this:
+A plain HTTP proxy opens a new connection per request and struggles with protocols that require long-lived connections, such as WebSockets and streaming responses. By multiplexing multiple streams over a single TCP connection, GoPort handles concurrency efficiently while remaining reliable behind NAT and firewalls.
 
-```
-$ goport http 8080
+The CLI also detects HTTP upgrade requests and switches to raw bidirectional forwarding when necessary, allowing WebSocket-based applications to work seamlessly.
 
-Dashboard        http://127.0.0.1:4040
-Region           Europe (eu)
-Status           online (12ms)
-Forwarding       https://abc123.goport.uz → localhost:8080
+One additional benefit is that GoPort preserves the original public `Host` header when forwarding requests to your local application. This keeps tools such as Swagger UI, OpenAPI, and host-based routing frameworks working exactly as they would in production.
 
-HTTP Requests
--------------
+## Tech Stack
 
-15:04:21   GET     /api/users                          200 OK
-15:04:23   POST    /api/login                          201 Created
-```
-
-Open `http://127.0.0.1:4040` in your browser for the full web dashboard — inspect every request and response, view headers and bodies, and **replay** any request with one click.
-
-### Expose a raw TCP port
-
-```bash
-goport tcp 5432
-```
-
-### Commands and flags
-
-```
-goport http [port]    Expose a local HTTP port
-goport tcp  [port]    Expose a local TCP port
-
-Flags for `http`:
-  -n, --name string     Request a custom subdomain (alias for --custom)
-      --custom string   Request a custom subdomain
-      --reset           Get a brand-new random subdomain
-  -r, --region string   Region to use (default "eu")
-```
-
-### `--custom` — pick your own subdomain
-
-By default GoPort reuses the last subdomain you were assigned, so your URL stays stable between runs. If you want a memorable, fixed address, claim one with `--custom` (or its shorthand `-n`):
-
-```bash
-goport http 8080 --custom myapp
-# → https://myapp.goport.uz
-
-goport http 8080 -n myapp        # same thing, shorter
-```
-
-Rules for custom subdomains:
-- Lowercase letters, numbers, and `-` only, 1–63 characters.
-- Can't start or end with `-`.
-- A few names are reserved (`api`, `admin`, `back`, `dashboard`, `www`).
-- If someone else already owns it, you'll get a clear "already taken" error.
-
-### `--reset` — get a fresh random subdomain
-
-Normally GoPort hands you back the same subdomain you used last time. When you want to deliberately throw that away and get a new random one — for example to invalidate an old link you shared — use `--reset`:
-
-```bash
-goport http 8080 --reset
-# → https://x9k2qp.goport.uz   (a new random subdomain every time)
-```
-
-> `--reset` and `--custom` can't be used together — one asks for a random name, the other asks for a specific name, so combining them is rejected with an error.
-
----
-
-## Self-hosting the server
-
-The whole stack runs with Docker Compose. From the repo root:
-
-```bash
-cp .env.example .env     # fill in your values
-docker compose up -d
-```
-
-This starts:
-- **backend** — exposes the public API on `8095` and the tunnel listener on `7000`.
-- **landing** — the marketing site on `3005`.
-
-The backend listens for CLI connections on TCP `7000` (override with the `TCP_PORT` env var) and resolves public hostnames against `GOPORT_DOMAIN`. Put a reverse proxy (the included [`nginx/`](nginx) config is a good start) in front of it to terminate TLS for `*.your-domain.com`.
-
----
-
-## Project layout
-
-```
-GoPort/
-├── server/                 # the goport CLI (Go + Cobra)
-│   ├── cmd/                # command definitions: root, http, tcp
-│   │   ├── root.go         # rootCmd + Execute()
-│   │   ├── http.go         # `goport http`, --custom / --reset / --region flags
-│   │   └── tcp.go          # `goport tcp`
-│   ├── tunnel/             # the tunnel engine
-│   │   ├── tunnel.go       # dial, handshake, yamux client, request forwarding
-│   │   ├── dashboard.go    # embedded web dashboard + JSON API
-│   │   └── terminal_ui.go  # the live in-terminal request log
-│   └── main.go
-├── backend/                # public server (PocketBase + custom TCP service)
-│   └── app/internal/service/tcp.go   # accepts CLI conns, assigns subdomains, routes traffic
-├── landing/                # goport.uz site (Next.js)
-├── nginx/                  # reverse proxy config
-└── docker-compose.yml
-```
-
----
-
-## Tech stack
-
-- **Go 1.23** — CLI and backend tunnel engine.
-- **[Cobra](https://github.com/spf13/cobra)** — command-line interface.
-- **[yamux](https://github.com/hashicorp/yamux)** — connection multiplexing.
-- **[PocketBase](https://pocketbase.io)** — backend framework, auth, and subdomain registry.
-- **Next.js** — landing page and the embedded CLI dashboard.
-
----
-
-## Contributing
-
-Contributions are welcome. To get started:
-
-1. Fork the repo and create a branch: `git checkout -b feature/my-change`.
-2. Make your changes. For the CLI, `cd server && make run` runs it against a local port.
-3. Keep commits focused and write a clear message.
-4. Open a pull request describing what changed and why.
-
-If you're planning a larger change, open an issue first so we can talk through the approach.
-
----
+- **[Go](https://go.dev)** — CLI and tunnel engine
+- **[Cobra](https://github.com/spf13/cobra)** — Command-line interface
+- **[yamux](https://github.com/hashicorp/yamux)** — TCP stream multiplexing
+- **[PocketBase](https://pocketbase.io)** — Authentication, tunnel management, and subdomain registry
+- **[Next.js](https://nextjs.org)** — Website and dashboard
 
 ## License
 
