@@ -24,29 +24,67 @@ Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort give
 
 ## How it works
 
-1. **Start a tunnel**
-   Run `goport http 8080`. The GoPort CLI opens a secure outbound connection to the server, making it work behind NAT and firewalls without port forwarding.
+1. **Authenticate the CLI**
+   Connect the CLI to your GoPort account/server using an auth token.
 
-2. **Get a public URL**
-   The server assigns a subdomain and returns a public HTTPS URL for your local application.
+   ```bash
+   goport auth <token>
+   ```
 
-3. **Establish a multiplexed connection**
-   GoPort uses [yamux](https://github.com/hashicorp/yamux) to multiplex multiple requests over a single persistent TCP connection.
+   > Authentication format is still being finalized. GoPort will use a simple token-based auth flow, not JWT.
 
-4. **Route incoming traffic**
-   When a request arrives, the server identifies the target tunnel using the request's host and opens a new stream.
+2. **Start a tunnel**
+   Run GoPort with the local port you want to expose.
 
-5. **Forward to your application**
-   The CLI receives the stream, forwards the request to your local application, and sends the response back through the tunnel.
+   ```bash
+   goport http 8080
+   ```
 
-6. **Clean up automatically**
-   When the CLI disconnects, the tunnel is removed immediately and no stale sessions remain.
+   The CLI opens an outbound connection to the GoPort server, so it works behind NAT and firewalls without port forwarding.
+
+3. **Get a public URL**
+   GoPort assigns a public HTTPS URL for your local application.
+
+   ```txt
+   https://abc123.goport.uz
+   ```
+
+4. **Use a custom subdomain**
+   You can request your own subdomain with `--custom`.
+
+   ```bash
+   goport http 8080 --custom myapp
+   ```
+
+   This gives your local app a cleaner URL:
+
+   ```txt
+   https://myapp.goport.uz
+   ```
+
+5. **Reset an existing tunnel name**
+   If a subdomain is already linked to an old session, use `--reset` to reclaim it.
+
+   ```bash
+   goport http 8080 --custom myapp --reset
+   ```
+
+6. **Route traffic to localhost**
+   When someone visits your public URL, the GoPort server routes the request through the tunnel to your local app running on:
+
+   ```txt
+   127.0.0.1:8080
+   ```
+
+7. **Disconnect cleanly**
+   When you press `Ctrl+C`, the connection closes and GoPort removes the tunnel automatically.
 
 <div align="center">
 
 <img src="docs/architecture.svg" alt="GoPort architecture" width="800" />
 
 </div>
+
 
 
 ### Why TCP + yamux instead of a plain HTTP proxy?
