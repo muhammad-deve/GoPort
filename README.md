@@ -126,16 +126,27 @@ One nice detail: GoPort preserves the original public `Host` header all the way 
 
 ---
 
-## Tech stack
+## Technical Details
 
-- **Go 1.23** — CLI and backend tunnel engine.
-- **[Cobra](https://github.com/spf13/cobra)** — command-line interface.
-- **[yamux](https://github.com/hashicorp/yamux)** — connection multiplexing.
-- **[PocketBase](https://pocketbase.io)** — backend framework, auth, and subdomain registry.
-- **Next.js** — landing page and the embedded CLI dashboard.
+### Why TCP + yamux instead of a plain HTTP proxy?
 
----
+GoPort uses a persistent TCP connection between the CLI and the server, with request multiplexing powered by yamux.
+
+This approach allows multiple requests to share a single connection, reducing connection overhead and improving performance under load. It also works reliably behind NAT and firewalls because all traffic originates from the client.
+
+Unlike simple reverse proxies, GoPort can efficiently handle many concurrent requests without repeatedly opening new connections.
+
+One additional benefit is that GoPort preserves the original `Host` header when forwarding requests to your local application, making it compatible with frameworks and tools that rely on host-based routing.
+
+## Tech Stack
+
+* **Go 1.23** — CLI and tunnel engine
+* **Cobra** — Command-line interface
+* **yamux** — TCP stream multiplexing
+* **PocketBase** — Authentication, tunnel management, and subdomain registry
+* **Next.js** — Website and dashboard
 
 ## License
 
 GoPort is released under the [MIT License](LICENSE).
+
