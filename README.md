@@ -17,7 +17,7 @@ Make your local projects accessible from anywhere with a secure public URL — a
 
 ## What is GoPort?
 
-GoPort is an open-source alternative to ngrok that turns local applications into publicly accessible HTTPS endpoints.
+GoPort is an open-source alternative to ngrok and jprq that turns local applications into publicly accessible HTTPS endpoints.
 
 Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort gives your localhost a public URL in seconds — without port forwarding, firewall changes, or a public IP.
 
