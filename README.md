@@ -7,8 +7,8 @@
 
 Make your local projects accessible from anywhere with a secure public URL — all with a single command.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-30f294.svg)](LICENSE)
 [![Go](https://img.shields.io/badge/Go-1.23-00ADD8.svg?logo=go&logoColor=white)](https://go.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-30f294.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-00c8ff.svg)](#contributing)
 
 </div>
