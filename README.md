@@ -21,41 +21,6 @@ GoPort is an open-source alternative to ngrok and jprq that turns local applicat
 
 Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort gives your localhost a public URL in seconds — without port forwarding, firewall changes, or a public IP.
 
-## Installation
-
-### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" width="18" height="18" /> macOS
-
-Install via Homebrew:
-
-```bash
-brew tap muhammad-deve/goport
-brew install goport
-```
-
-### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows11/windows11-original.svg" width="18" height="18" /> Windows
-
-Install via Chocolatey:
-
-```bash
-choco install goport
-```
-
-### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="18" height="18" /> Linux
-
-Install with the official installation script:
-
-```bash
-curl -fsSL https://goport.uz/install.sh | sh
-```
-
-### Verify Installation
-
-```bash
-goport --version
-```
-
-You should see the installed GoPort version printed to the terminal.
-
 
 ## How it works
 
@@ -115,6 +80,40 @@ You should see the installed GoPort version printed to the terminal.
 
 </div>
 
+## Installation
+
+### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" width="18" height="18" /> macOS
+
+Install via Homebrew:
+
+```bash
+brew tap muhammad-deve/goport
+brew install goport
+```
+
+### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows11/windows11-original.svg" width="18" height="18" /> Windows
+
+Install via Chocolatey:
+
+```bash
+choco install goport
+```
+
+### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="18" height="18" /> Linux
+
+Install with the official installation script:
+
+```bash
+curl -fsSL https://goport.uz/install.sh | sh
+```
+
+### Verify Installation
+
+```bash
+goport --version
+```
+
+You should see the installed GoPort version printed to the terminal.
 
 
 
