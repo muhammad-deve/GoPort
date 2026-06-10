@@ -7,6 +7,8 @@ services:
     ports:
       - "8095:8090"
       - "7000:7000"
+    env_file:
+      - ./backend/app/.env
     environment:
       - TCP_PORT=7000
     volumes:
@@ -14,7 +16,11 @@ services:
     restart: unless-stopped
 
   landing:
-    build: ./landing
+    build:
+      context: ./landing
+      args:
+        # Baked into the client JS at build time. Must be the public backend URL.
+        NEXT_PUBLIC_API_BASE_URL: https://back.goport.uz
     container_name: goport-landing
     ports:
       - "3005:3000"
