@@ -108,7 +108,7 @@ choco install goport
 Install with the official installation script:
 
 ```bash
-curl -fsSL https://goport.uz/install.sh | sh
+curl -fsSL https://github.com/muhammad-deve/GoPort/releases/latest/download/goport-linux-amd64 -o /usr/local/bin/goport && chmod +x /usr/local/bin/goport
 ```
 
 ### Verify Installation
