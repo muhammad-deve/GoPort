@@ -27,9 +27,14 @@ jobs:
         with:
           go-version-file: server/go.mod
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.1
+          run_install: false
+
       - name: Install dashboard dependencies
         run: |
-          corepack enable
           cd server/dashboard
           pnpm install --frozen-lockfile
 
