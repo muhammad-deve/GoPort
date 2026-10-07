@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -41,6 +41,70 @@ jobs:
       - name: Build release binaries
         run: make -C server release
 
+      - name: Upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries
+          path: server/dist/goport-*
+          if-no-files-found: error
+
+  # Inno Setup only runs on Windows, so the installer is built on a Windows
+  # runner from the binary cross-compiled above.
+  windows-installer:
+    needs: build
+    runs-on: windows-latest
+
+    steps:
+      # Only Installers/Windows is needed here; the binary comes from the build job.
+      - name: Check out the release tag
+        uses: actions/checkout@v4
+
+      - name: Download binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: binaries
+          path: server/dist
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $findIscc = { Get-ChildItem "${env:ProgramFiles(x86)}\Inno Setup *\ISCC.exe", "$env:ProgramFiles\Inno Setup *\ISCC.exe" -ErrorAction SilentlyContinue | Select-Object -First 1 }
+          $iscc = & $findIscc
+          if (-not $iscc) { choco install innosetup -y --no-progress; $iscc = & $findIscc }
+          & $iscc.FullName "/DAppVersion=$($env:GITHUB_REF_NAME.TrimStart('v'))" Installers\Windows\goport.iss
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+
+      # Install silently the way a user would, then resolve `goport` from a fresh
+      # PATH to prove the command works outside the install folder.
+      - name: Verify installer
+        shell: pwsh
+        run: |
+          $setup = Start-Process server\dist\goport-windows-setup.exe -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
+          if ($setup.ExitCode) { throw "Installer exited with $($setup.ExitCode)" }
+          $env:Path = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [Environment]::GetEnvironmentVariable("Path", "User")
+          Set-Location $env:USERPROFILE
+          $resolved = (Get-Command goport -ErrorAction Stop).Source
+          if ($resolved -notlike "*\Programs\GoPort\goport.exe") { throw "goport resolved to $resolved" }
+          goport --version
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer
+          path: server/dist/goport-windows-setup.exe
+          if-no-files-found: error
+
+  publish:
+    needs: [build, windows-installer]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download release assets
+        uses: actions/download-artifact@v4
+        with:
+          path: server/dist
+          merge-multiple: true
+
       - name: Generate checksums
         run: |
           cd server/dist
@@ -49,6 +113,7 @@ jobs:
       - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           tag="${GITHUB_REF_NAME}"
           if gh release view "$tag" >/dev/null 2>&1; then

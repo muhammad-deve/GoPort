@@ -7,3 +7,9 @@
 [submodule "server"]
 	path = server
 	url = git@github.com:muhammad-deve/server.git
+[submodule "Installers/HomeBrew"]
+	path = Installers/HomeBrew
+	url = https://github.com/muhammad-deve/homebrew-goport.git
+[submodule "Installers/scoop/scoop-goport"]
+	path = Installers/scoop/scoop-goport
+	url = https://github.com/muhammad-deve/scoop-goport.git
