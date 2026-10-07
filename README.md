@@ -91,8 +91,7 @@ Unlike many hosted tunneling services, GoPort can be fully self-hosted, allowing
 Install via Homebrew:
 
 ```bash
-brew tap muhammad-deve/goport
-brew install goport
+brew install muhammad-deve/goport/goport
 ```
 
 ### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows11/windows11-original.svg" width="18" height="18" /> Windows
