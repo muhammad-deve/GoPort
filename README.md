@@ -96,7 +96,9 @@ brew install muhammad-deve/goport/goport
 
 ### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows11/windows11-original.svg" width="18" height="18" /> Windows
 
-Install via Chocolatey:
+**[Download the GoPort installer](https://github.com/muhammad-deve/GoPort/releases/latest/download/goport-windows-setup.exe)** and open it. It adds `goport` to your PATH, so the command works from any folder once you open a new terminal. No administrator rights are needed.
+
+Or install via Chocolatey:
 
 ```bash
 choco install goport
