@@ -30,15 +30,21 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 ChangesEnvironment=yes
 UninstallDisplayName=GoPort
-UninstallDisplayIcon={app}\goport.exe
+; goport.exe carries no icon resource, so Installed apps shows the logo file instead.
+UninstallDisplayIcon={app}\goport.ico
 OutputDir=..\..\server\dist
 OutputBaseFilename=goport-windows-setup
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
+; Branding, rendered from landing/app/icon.svg. Each image lists 100% and 200% DPI sizes.
+SetupIconFile=goport.ico
+WizardSmallImageFile=wizard-small-55.png,wizard-small-110.png
+WizardImageFile=wizard-large-164x314.png,wizard-large-328x628.png
 
 [Files]
 Source: "..\..\server\dist\goport-windows-amd64.exe"; DestDir: "{app}"; DestName: "goport.exe"; Flags: ignoreversion
+Source: "goport.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 [Registry]
 ; {olddata} is the raw existing value, so %VARIABLES% in the user's PATH survive.
