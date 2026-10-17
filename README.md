@@ -112,17 +112,6 @@ goport http 8080 --custom myapp    # https://myapp.goport.uz
 
 **WebSockets** work too, so things like Next.js hot reload behave normally through the tunnel.
 
-## Free and Pro
-
-|                   | Free | Pro   |
-|-------------------|------|-------|
-| Tunnels at once   | 1    | 10    |
-| Traffic per month | 5 GB | 70 GB |
-| Devices (tokens)  | 1    | 5     |
-| Custom subdomain  | No   | Yes   |
-
-Prices are on the [pricing page](https://goport.uz/pricing).
-
 ## How it works
 
 <p align="center">
