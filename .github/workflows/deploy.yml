@@ -15,11 +15,14 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            set -e
             cd ~/personal/GoPort
             git pull origin main
             git submodule sync
             git submodule update --init --remote --recursive
             docker-compose build
-            docker-compose stop || true
-            docker-compose rm -f || true
+            # Recreate only the containers whose image or config changed.
+            # goport-backend hosts the tunnel server, so restarting it drops
+            # every live tunnel; a docs-only push must leave it running. The
+            # backend and landing repos deploy their own changes.
             docker-compose up -d --remove-orphans
