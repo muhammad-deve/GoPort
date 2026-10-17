@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="332" viewBox="0 0 800 332" role="img" aria-label="A request goes from the internet to GoPort Cloud, through the tunnel to the GoPort CLI on your machine, then to your app on localhost:8080, and the response comes back the same way">
+<title>How a GoPort tunnel routes traffic</title>
+<defs>
+<style>
+.mono{font-family:'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace}
+.sans{font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif}
+.card{fill:#ffffff;stroke:#d8e2e2}
+.node{fill:#f8fafa;stroke:#d8e2e2}
+.node.hi{stroke:#0b9f6e;stroke-opacity:.4}
+.node.ac{stroke:#0b9f6e;stroke-opacity:.3}
+.ico{stroke:#0b1518}
+.ico.green{stroke:#0b9f6e}
+.fg{fill:#0b1518}
+.mu{fill:#4d5e67}
+.req{fill:#0b9f6e}
+.glow{fill:#0b9f6e}
+.rq-stop{stop-color:#0b9f6e}
+.dash-rq{stroke:#0b9f6e}
+@media (prefers-color-scheme: dark){
+.card{fill:#0d1117;stroke:#263437}
+.node{fill:#091114;stroke:#263437}
+.node.hi{stroke:#38d996;stroke-opacity:.4}
+.node.ac{stroke:#38d996;stroke-opacity:.3}
+.ico{stroke:#eff7f5}
+.ico.green{stroke:#38d996}
+.fg{fill:#eff7f5}
+.mu{fill:#93a1a7}
+.req{fill:#38d996}
+.glow{fill:#38d996}
+.rq-stop{stop-color:#38d996}
+.dash-rq{stroke:#38d996}
+}
+.go{transform:translateX(54.5px);animation:go 2400ms linear infinite}
+.back{transform:translateX(54.5px);animation:back 2400ms linear infinite;animation-delay:-1200ms}
+@keyframes go{0%{transform:translateX(0);opacity:0}12%,88%{opacity:1}100%{transform:translateX(109.0px);opacity:0}}
+@keyframes back{0%{transform:translateX(109.0px);opacity:0}12%,88%{opacity:1}100%{transform:translateX(0);opacity:0}}
+.pulse{opacity:.22;animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.14}50%{opacity:.34}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+<linearGradient id="rq" x1="0" x2="1"><stop offset="0" class="rq-stop" stop-opacity=".2"/><stop offset=".5" class="rq-stop" stop-opacity=".5"/><stop offset="1" class="rq-stop" stop-opacity=".2"/></linearGradient>
+<linearGradient id="rs" x1="0" x2="1"><stop offset="0" stop-color="#38bdf8" stop-opacity=".2"/><stop offset=".5" stop-color="#38bdf8" stop-opacity=".4"/><stop offset="1" stop-color="#38bdf8" stop-opacity=".2"/></linearGradient>
+<filter id="soft" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="2.5"/></filter>
+<filter id="blur" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="9"/></filter>
+</defs>
+<rect class="card" x="10.5" y="10.5" width="779" height="311" rx="16" stroke-opacity=".6"/>
+<text x="400.0" y="56" text-anchor="middle" class="sans fg" font-size="14" font-weight="500">How a GoPort tunnel routes traffic</text>
+<rect x="152.0" y="129.5" width="109.0" height="1" fill="url(#rq)"/>
+<rect x="152.0" y="141.5" width="109.0" height="1" fill="url(#rs)"/>
+<line class="dash-rq" x1="345.0" y1="130.0" x2="455.0" y2="130.0" stroke-dasharray="5 6" stroke-opacity=".45"/>
+<line x1="345.0" y1="142.0" x2="455.0" y2="142.0" stroke="#38bdf8" stroke-dasharray="5 6" stroke-opacity=".35"/>
+<rect x="539.0" y="129.5" width="109.0" height="1" fill="url(#rq)"/>
+<rect x="539.0" y="141.5" width="109.0" height="1" fill="url(#rs)"/>
+<rect class="node" x="78.0" y="104" width="64" height="64" rx="16"/>
+<g class="ico" transform="translate(96 122.0) scale(1.1667)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></g>
+<text x="110" y="192" text-anchor="middle" class="mono fg" font-size="12" font-weight="500">HTTP request</text>
+<text x="110" y="207" text-anchor="middle" class="mono mu" font-size="10">from the internet</text>
+<rect class="glow pulse" x="277.0" y="110" width="52" height="52" rx="14" filter="url(#blur)"/>
+<rect class="node hi" x="271.0" y="104" width="64" height="64" rx="16"/>
+<g class="ico green" transform="translate(289 122.0) scale(1.1667)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></g>
+<text x="303" y="192" text-anchor="middle" class="mono fg" font-size="12" font-weight="500">GoPort Cloud</text>
+<text x="303" y="207" text-anchor="middle" class="mono mu" font-size="10">secure tunnel</text>
+<rect class="node" x="465.0" y="104" width="64" height="64" rx="16"/>
+<g class="ico" transform="translate(483 122.0) scale(1.1667)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19h8"/><path d="m4 17 6-6-6-6"/></g>
+<text x="497" y="192" text-anchor="middle" class="mono fg" font-size="12" font-weight="500">GoPort CLI agent</text>
+<text x="497" y="207" text-anchor="middle" class="mono mu" font-size="10">on your machine</text>
+<rect class="node ac" x="658.0" y="104" width="64" height="64" rx="16"/>
+<g class="ico green" transform="translate(676 122.0) scale(1.1667)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8"/><path d="M10 19v-3.96 3.15"/><path d="M7 19h5"/><rect width="6" height="10" x="16" y="12" rx="2"/></g>
+<text x="690" y="192" text-anchor="middle" class="mono fg" font-size="12" font-weight="500">localhost:8080</text>
+<text x="690" y="207" text-anchor="middle" class="mono mu" font-size="10">your app</text>
+<g transform="translate(152.0 130.0)"><g class="go" style="--len:109.0px"><circle r="7" class="req" opacity=".25" filter="url(#soft)"/><circle r="4" class="req"/></g></g>
+<g transform="translate(152.0 142.0)"><g class="back"><circle r="7" fill="#38bdf8" opacity=".25" filter="url(#soft)"/><circle r="4" fill="#38bdf8"/></g></g>
+<g transform="translate(345.0 130.0)"><g class="go" style="--len:110.0px"><circle r="7" class="req" opacity=".25" filter="url(#soft)"/><circle r="4" class="req"/></g></g>
+<g transform="translate(345.0 142.0)"><g class="back"><circle r="7" fill="#38bdf8" opacity=".25" filter="url(#soft)"/><circle r="4" fill="#38bdf8"/></g></g>
+<g transform="translate(539.0 130.0)"><g class="go" style="--len:109.0px"><circle r="7" class="req" opacity=".25" filter="url(#soft)"/><circle r="4" class="req"/></g></g>
+<g transform="translate(539.0 142.0)"><g class="back"><circle r="7" fill="#38bdf8" opacity=".25" filter="url(#soft)"/><circle r="4" fill="#38bdf8"/></g></g>
+<g class="mono mu" font-size="11">
+<circle cx="326.0" cy="250" r="4" class="req"/><text x="336.0" y="254">request</text>
+<circle cx="414.0" cy="250" r="4" fill="#38bdf8"/><text x="424.0" y="254">response</text>
+</g>
+<text x="400.0" y="296" text-anchor="middle" class="mono mu" font-size="12" opacity=".75">The CLI opens the connection from your machine. No inbound router port is required.</text>
+</svg>

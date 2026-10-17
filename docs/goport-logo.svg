@@ -6,6 +6,13 @@
     .ring   { fill: none; stroke: #0095c8; }
     .dot    { fill: #0095c8; }
     .arrow  { fill: none; stroke: #0095c8; }
+    @media (prefers-color-scheme: dark) {
+      .fg     { fill: #eef3ff; }
+      .cutout { fill: #0d1117; }
+      .ring   { stroke: #25c8ff; }
+      .dot    { fill: #25c8ff; }
+      .arrow  { stroke: #25c8ff; }
+    }
   </style>
 
   <path class="fg" d="M108 92C78 82 42 98 36 130C28 168 50 210 88 220C118 228 148 212 155 185L155 158L108 158L108 175L138 175C132 196 114 207 94 203C68 198 55 174 60 150C65 122 88 108 112 112C124 114 134 120 140 128L155 115C145 100 128 92 108 92Z"/>

@@ -1,19 +1,13 @@
 <div align="center">
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/goport-logo-dark.svg">
-  <img src="docs/goport-logo.svg" alt="GoPort" width="380">
-</picture>
+<img src="docs/goport-logo.svg" alt="GoPort" width="420">
 
 Put your localhost on a public HTTPS link with one command.
 
 [![Latest release](https://img.shields.io/github/v/release/muhammad-deve/GoPort?color=0b9f6e&label=release)](https://github.com/muhammad-deve/GoPort/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0b9f6e.svg)](LICENSE)
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/terminal-dark.svg">
-  <img src="docs/terminal-light.svg" alt="Running goport http 8080 prints a public https link, then logs each request as it arrives">
-</picture>
+<img src="docs/terminal.svg" alt="Running goport http 8080 prints a public https link, then logs each request as it arrives">
 
 </div>
 
@@ -131,9 +125,9 @@ Prices are on the [pricing page](https://goport.uz/pricing).
 
 ## How it works
 
-```text
-visitor ──▶ goport.uz ══(one TCP connection)══▶ goport ──▶ localhost:8080
-```
+<p align="center">
+  <img src="docs/how-it-works.svg" alt="A request goes from the internet to GoPort Cloud, through the tunnel to the GoPort CLI on your machine, then to your app on localhost:8080, and the response comes back the same way">
+</p>
 
 The CLI connects out to the server and keeps that one connection open. When a request arrives for your subdomain, the server opens a new stream on that connection using [yamux](https://github.com/hashicorp/yamux), and the CLI hands it to your local port and sends the response back the same way.
 

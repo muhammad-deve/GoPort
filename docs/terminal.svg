@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="460" viewBox="0 0 800 460" role="img" aria-label="goport http 8080 prints a public https link, then logs each request as it arrives">
+<title>goport http 8080</title>
+<defs>
+<style>
+.t{font-family:'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;font-size:14px}
+.s,.label{font-family:'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;font-size:12px}
+.b{font-weight:600}
+.bg{fill:#eaf1f5}
+.bar{fill:#e4eff2}
+.edge{stroke:#0b9f6e}
+.rule{fill:#0b9f6e}
+.sh{flood-opacity:0.16}
+.label,.m{fill:#506069}
+.t,.s,.b{fill:#0e1d24}
+.p{fill:#0b9f6e}
+@media (prefers-color-scheme: dark){
+.bg{fill:#020609}
+.bar{fill:#030b0d}
+.edge{stroke:#38d996}
+.rule{fill:#38d996}
+.sh{flood-opacity:0.55}
+.label,.m{fill:#7e8c92}
+.t,.s,.b{fill:#e9f0f3}
+.p{fill:#38d996}
+}
+@keyframes c0{0%,0.918%{fill-opacity:0}0.935%,100%{fill-opacity:1}}.c0{animation:c0 5880ms linear infinite}
+@keyframes c1{0%,1.854%{fill-opacity:0}1.871%,100%{fill-opacity:1}}.c1{animation:c1 5880ms linear infinite}
+@keyframes c2{0%,2.789%{fill-opacity:0}2.806%,100%{fill-opacity:1}}.c2{animation:c2 5880ms linear infinite}
+@keyframes c3{0%,3.724%{fill-opacity:0}3.741%,100%{fill-opacity:1}}.c3{animation:c3 5880ms linear infinite}
+@keyframes c4{0%,4.660%{fill-opacity:0}4.677%,100%{fill-opacity:1}}.c4{animation:c4 5880ms linear infinite}
+@keyframes c5{0%,5.595%{fill-opacity:0}5.612%,100%{fill-opacity:1}}.c5{animation:c5 5880ms linear infinite}
+@keyframes c6{0%,6.531%{fill-opacity:0}6.548%,100%{fill-opacity:1}}.c6{animation:c6 5880ms linear infinite}
+@keyframes c7{0%,7.466%{fill-opacity:0}7.483%,100%{fill-opacity:1}}.c7{animation:c7 5880ms linear infinite}
+@keyframes c8{0%,8.401%{fill-opacity:0}8.418%,100%{fill-opacity:1}}.c8{animation:c8 5880ms linear infinite}
+@keyframes c9{0%,9.337%{fill-opacity:0}9.354%,100%{fill-opacity:1}}.c9{animation:c9 5880ms linear infinite}
+@keyframes c10{0%,10.272%{fill-opacity:0}10.289%,100%{fill-opacity:1}}.c10{animation:c10 5880ms linear infinite}
+@keyframes c11{0%,11.207%{fill-opacity:0}11.224%,100%{fill-opacity:1}}.c11{animation:c11 5880ms linear infinite}
+@keyframes c12{0%,12.143%{fill-opacity:0}12.160%,100%{fill-opacity:1}}.c12{animation:c12 5880ms linear infinite}
+@keyframes c13{0%,13.078%{fill-opacity:0}13.095%,100%{fill-opacity:1}}.c13{animation:c13 5880ms linear infinite}
+@keyframes c14{0%,14.014%{fill-opacity:0}14.031%,100%{fill-opacity:1}}.c14{animation:c14 5880ms linear infinite}
+@keyframes c15{0%,14.949%{fill-opacity:0}14.966%,100%{fill-opacity:1}}.c15{animation:c15 5880ms linear infinite}
+@keyframes details{0%,18.707%{opacity:0}21.259%,100%{opacity:1}}.details{animation:details 5880ms linear infinite}
+@keyframes r0{0%,25.170%{opacity:0;transform:translateY(4px)}30.272%,100%{opacity:1;transform:translateY(0)}}.r0{animation:r0 5880ms linear infinite}
+@keyframes r1{0%,33.673%{opacity:0;transform:translateY(4px)}38.776%,100%{opacity:1;transform:translateY(0)}}.r1{animation:r1 5880ms linear infinite}
+@keyframes r2{0%,42.177%{opacity:0;transform:translateY(4px)}47.279%,100%{opacity:1;transform:translateY(0)}}.r2{animation:r2 5880ms linear infinite}
+@keyframes r3{0%,50.680%{opacity:0;transform:translateY(4px)}55.782%,100%{opacity:1;transform:translateY(0)}}.r3{animation:r3 5880ms linear infinite}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+<clipPath id="box"><rect x="20" y="14" width="760" height="412" rx="22"/></clipPath>
+<filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow class="sh" dx="0" dy="14" stdDeviation="14" flood-color="#000"/></filter>
+</defs>
+<rect class="bg" x="20" y="14" width="760" height="412" rx="22" filter="url(#shadow)"/>
+<g clip-path="url(#box)">
+<rect class="bar" x="20" y="14" width="760" height="46"/>
+<rect class="rule" x="20" y="59" width="760" height="1" fill-opacity="0.15"/>
+</g>
+<rect class="edge" x="20.5" y="14.5" width="759" height="411" rx="21.5" fill="none" stroke-opacity="0.2"/>
+<circle cx="46" cy="37.0" r="6" fill="#ff5f56"/>
+<circle cx="64" cy="37.0" r="6" fill="#ffbd2e"/>
+<circle cx="82" cy="37.0" r="6" fill="#27ca40"/>
+<text x="104" y="41.0" class="label">terminal</text>
+<text x="44" y="100" xml:space="preserve" class="t"><tspan class="m">$</tspan><tspan dx="8" class="b"><tspan class="c0">g</tspan><tspan class="c1">o</tspan><tspan class="c2">p</tspan><tspan class="c3">o</tspan><tspan class="c4">r</tspan><tspan class="c5">t</tspan><tspan class="c6"> </tspan><tspan class="c7">h</tspan><tspan class="c8">t</tspan><tspan class="c9">t</tspan><tspan class="c10">p</tspan><tspan class="c11"> </tspan><tspan class="c12">8</tspan><tspan class="c13">0</tspan><tspan class="c14">8</tspan><tspan class="c15">0</tspan></tspan></text>
+<g class="details"><text x="44" y="146.75" class="t m">Dashboard</text><text x="164" y="146.75" xml:space="preserve" class="t"><tspan class="b">http://127.0.0.1:4040</tspan></text><text x="44" y="173.50" class="t m">Region</text><text x="164" y="173.50" xml:space="preserve" class="t"><tspan class="b">Europe (eu)</tspan></text><text x="44" y="200.25" class="t m">Status</text><text x="164" y="200.25" xml:space="preserve" class="t"><tspan class="p">online</tspan><tspan class="m"> (133ms)</tspan></text><text x="44" y="227.00" class="t m">Forwarding</text><text x="164" y="227.00" xml:space="preserve" class="t"><tspan class="p">https://abc123.goport.uz</tspan><tspan class="m"> → </tspan><tspan class="b">localhost:8080</tspan></text><text x="44" y="273.75" class="t b">HTTP Requests</text><text x="44" y="296.50" class="t m" opacity="0.8">-------------</text><g class="r0"><text x="44" y="325.25" xml:space="preserve" class="s"><tspan class="m">14:32:15</tspan><tspan dx="12" class="m">GET</tspan><tspan dx="12" class="b">/api/users</tspan></text><text x="756" y="325.25" text-anchor="end" class="s b p">200 OK</text></g><g class="r1"><text x="44" y="348.75" xml:space="preserve" class="s"><tspan class="m">14:32:08</tspan><tspan dx="12" class="m">POST</tspan><tspan dx="12" class="b">/api/auth/login</tspan></text><text x="756" y="348.75" text-anchor="end" class="s b p">200 OK</text></g><g class="r2"><text x="44" y="372.25" xml:space="preserve" class="s"><tspan class="m">14:31:52</tspan><tspan dx="12" class="m">PUT</tspan><tspan dx="12" class="b">/api/users/42</tspan></text><text x="756" y="372.25" text-anchor="end" class="s b p">200 OK</text></g><g class="r3"><text x="44" y="395.75" xml:space="preserve" class="s"><tspan class="m">14:31:45</tspan><tspan dx="12" class="m">DELETE</tspan><tspan dx="12" class="b">/api/posts/17</tspan></text><text x="756" y="395.75" text-anchor="end" class="s b p">200 OK</text></g></g>
+</svg>
