@@ -34,3 +34,10 @@ init-ssl.sh
 # Editor/IDE
 # .idea/
 # .vscode/
+
+# Package manager caches and dependencies
+.pnpm-store/
+node_modules/
+
+# Scratch folders
+.tmp*/
