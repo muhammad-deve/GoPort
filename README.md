@@ -1,147 +1,178 @@
 <div align="center">
 
-<img src="docs/goport-logo.svg" alt="GoPort" width="420" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/goport-logo-dark.svg">
+  <img src="docs/goport-logo.svg" alt="GoPort" width="380">
+</picture>
 
+Put your localhost on a public HTTPS link with one command.
 
-**Expose localhost. Instantly.**
+[![Latest release](https://img.shields.io/github/v/release/muhammad-deve/GoPort?color=0b9f6e&label=release)](https://github.com/muhammad-deve/GoPort/releases/latest)
+[![License: MIT](https://img.shields.io/badge/license-MIT-0b9f6e.svg)](LICENSE)
 
-Make your local projects accessible from anywhere with a secure public URL — all with a single command.
-
-[![Go](https://img.shields.io/badge/Go-1.23-00ADD8.svg?logo=go&logoColor=white)](https://go.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-30f294.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-00c8ff.svg)](#contributing)
-
-</div>
-
----
-
-## What is GoPort?
-
-GoPort is an open-source alternative to ngrok and jprq that turns local applications into publicly accessible HTTPS endpoints.
-
-Whether you're testing webhooks, sharing a demo, or exposing an API, GoPort gives your localhost a public URL in seconds — without port forwarding, firewall changes, or a public IP.
-
-Built for developers, GoPort makes it easy to expose services running on your machine while keeping setup simple and infrastructure under your control. It uses a persistent multiplexed connection to efficiently route traffic between the public internet and your local application.
-
-Unlike many hosted tunneling services, GoPort can be fully self-hosted, allowing teams to manage their own tunnels, domains, and infrastructure without vendor lock-in.
-
-
-## How it works
-
-1. **Authenticate the CLI**
-
-   ```bash
-   goport auth <token>
-   ```
-
-   Authenticate the CLI with your GoPort account and connect it to your server.
-
-2. **Start a tunnel**
-
-   ```bash
-   goport http 8080
-   ```
-
-   GoPort opens a secure outbound connection and instantly creates a public HTTPS URL for your local application.
-
-3. **Use a custom subdomain**
-
-   ```bash
-   goport http 8080 --custom myapp
-   ```
-
-   Request a memorable URL for your tunnel:
-
-   ```txt
-   https://myapp.goport.uz
-   ```
-
-4. **Generate a new URL**
-
-   ```bash
-   goport http 8080 --reset
-   ```
-
-   Discards the current subdomain and creates a brand-new public URL.
-
-5. **Monitor traffic in real time**
-
-   After connecting, GoPort launches a local dashboard where you can inspect incoming requests, responses, tunnel status, and latency.
-
-   <div align="center">
-     <img src="docs/terminal-preview.svg" alt="GoPort Dashboard" width="800" />
-   </div>
-
-6. **Route traffic to localhost**
-
-   When someone visits your public URL, GoPort forwards the request through a secure tunnel directly to your local application.
-
-7. **Disconnect cleanly**
-
-   Press `Ctrl+C` at any time to close the tunnel. GoPort automatically removes the active session and releases the URL.
-
-<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/terminal-dark.svg">
+  <img src="docs/terminal-light.svg" alt="Running goport http 8080 prints a public https link, then logs each request as it arrives">
+</picture>
 
 </div>
 
-## Installation
+GoPort is an open-source tunnel, similar to ngrok. Run `goport http 8080` and the app on port 8080 becomes reachable at a link like `https://abc123.goport.uz`. You don't need a public IP, port forwarding or any router settings.
 
-### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" width="18" height="18" /> macOS
+It's handy when you want to show someone a site that only runs on your machine, test webhooks from Telegram, payment providers or GitHub against local code, or open a local API from your phone.
 
-Install via Homebrew:
+## Download
+
+<p align="center">
+  <a href="https://github.com/muhammad-deve/GoPort/releases/latest/download/goport-windows-setup.exe"><img src="docs/download-windows.svg" alt="Download for Windows" height="44"></a>
+  <a href="https://github.com/muhammad-deve/GoPort/releases/latest/download/goport-darwin-arm64"><img src="docs/download-macos-arm64.svg" alt="Download for macOS (Apple Silicon)" height="44"></a>
+  <a href="https://github.com/muhammad-deve/GoPort/releases/latest/download/goport-darwin-amd64"><img src="docs/download-macos-intel.svg" alt="Download for macOS (Intel)" height="44"></a>
+  <a href="https://github.com/muhammad-deve/GoPort/releases/latest/download/goport-linux-amd64"><img src="docs/download-linux.svg" alt="Download for Linux" height="44"></a>
+</p>
+
+Every button downloads the latest release. The Windows installer adds `goport` to your PATH and doesn't need admin rights. On macOS and Linux you get the program file itself, which needs one more step (see below), so Homebrew is the easier route on a Mac.
+
+## Getting started
+
+### 1. Install
+
+**macOS** with Homebrew:
 
 ```bash
 brew install muhammad-deve/goport/goport
 ```
 
-### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows11/windows11-original.svg" width="18" height="18" /> Windows
+**Windows:** run the installer from the button above, or use Scoop or Chocolatey:
 
-**[Download the GoPort installer](https://github.com/muhammad-deve/GoPort/releases/latest/download/goport-windows-setup.exe)** and open it. It adds `goport` to your PATH, so the command works from any folder once you open a new terminal. No administrator rights are needed.
+```
+scoop bucket add goport https://github.com/muhammad-deve/scoop-goport
+scoop install goport
+```
 
-Or install via Chocolatey:
-
-```bash
+```
 choco install goport
 ```
 
-### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="18" height="18" /> Linux
-
-Install with the official installation script:
+**Linux:**
 
 ```bash
-curl -fsSL https://github.com/muhammad-deve/GoPort/releases/latest/download/goport-linux-amd64 -o /usr/local/bin/goport && chmod +x /usr/local/bin/goport
+sudo curl -fsSL -o /usr/local/bin/goport \
+  https://github.com/muhammad-deve/GoPort/releases/latest/download/goport-linux-amd64
+sudo chmod +x /usr/local/bin/goport
 ```
 
-### Verify Installation
+If you used a download button on macOS or Linux, make the file runnable and move it onto your PATH. Use the name of the file you got, for example on an Apple Silicon Mac:
+
+```bash
+cd ~/Downloads
+chmod +x goport-darwin-arm64
+xattr -c goport-darwin-arm64    # macOS only: clears the download quarantine
+sudo mv goport-darwin-arm64 /usr/local/bin/goport
+```
+
+Check that it worked:
 
 ```bash
 goport --version
 ```
 
-You should see the installed GoPort version printed to the terminal.
+### 2. Connect your account
 
----
+Sign up at [goport.uz](https://goport.uz/signup), then copy your token from the [Tokens](https://goport.uz/dashboard#tokens) page of the dashboard:
 
-## Technical Details
+```bash
+goport auth <token>
+```
 
-### Why TCP + yamux instead of a plain HTTP proxy?
+The token is saved on your machine, so you only do this once.
 
-GoPort uses a persistent TCP connection between the CLI and the server, with request multiplexing powered by yamux.
+### 3. Start a tunnel
 
-A plain HTTP proxy opens a new connection per request and struggles with protocols that require long-lived connections, such as WebSockets and streaming responses. By multiplexing multiple streams over a single TCP connection, GoPort handles concurrency efficiently while remaining reliable behind NAT and firewalls.
+```bash
+goport http 8080
+```
 
-The CLI also detects HTTP upgrade requests and switches to raw bidirectional forwarding when necessary, allowing WebSocket-based applications to work seamlessly.
+Use whatever port your app runs on. GoPort prints the public link and logs each request as it comes in. Press `Ctrl+C` to stop.
 
-One additional benefit is that GoPort preserves the original public `Host` header when forwarding requests to your local application. This keeps tools such as Swagger UI, OpenAPI, and host-based routing frameworks working exactly as they would in production.
+## Everyday use
 
-## Tech Stack
+**Your link stays the same.** `goport http` reuses your last subdomain, so you can restart it without sending people a new link.
 
-- **[Go](https://go.dev)** — CLI and tunnel engine
-- **[Cobra](https://github.com/spf13/cobra)** — Command-line interface
-- **[yamux](https://github.com/hashicorp/yamux)** — TCP stream multiplexing
-- **[PocketBase](https://pocketbase.io)** — Authentication, tunnel management, and subdomain registry
-- **[Next.js](https://nextjs.org)** — Website and dashboard
+**Get a new random link:**
+
+```bash
+goport http 8080 --reset
+```
+
+**Pick your own name** (Pro):
+
+```bash
+goport http 8080 --custom myapp    # https://myapp.goport.uz
+```
+
+`-n myapp` does the same thing.
+
+**Look at the traffic.** While a tunnel is running, open <http://127.0.0.1:4040>. You can see every request and response, replay a request, or copy it as a cURL command.
+
+**Dropped connections.** If your Wi-Fi drops or your laptop goes to sleep, GoPort reconnects by itself and keeps the same link (since 0.1.8).
+
+**WebSockets** work too, so things like Next.js hot reload behave normally through the tunnel.
+
+## Free and Pro
+
+|                   | Free | Pro   |
+|-------------------|------|-------|
+| Tunnels at once   | 1    | 10    |
+| Traffic per month | 5 GB | 70 GB |
+| Devices (tokens)  | 1    | 5     |
+| Custom subdomain  | No   | Yes   |
+
+Prices are on the [pricing page](https://goport.uz/pricing).
+
+## How it works
+
+```text
+visitor ──▶ goport.uz ══(one TCP connection)══▶ goport ──▶ localhost:8080
+```
+
+The CLI connects out to the server and keeps that one connection open. When a request arrives for your subdomain, the server opens a new stream on that connection using [yamux](https://github.com/hashicorp/yamux), and the CLI hands it to your local port and sends the response back the same way.
+
+Because your machine makes the connection, it works behind NAT and firewalls with no setup. The original `Host` header is kept, so apps that build links from it (Swagger UI, redirects, host-based routing) behave the same as in production.
+
+## Configuration
+
+These environment variables are optional:
+
+| Variable             | What it does                                                          |
+|----------------------|-----------------------------------------------------------------------|
+| `GOPORT_TOKEN`       | Use this token instead of the one saved by `goport auth`, e.g. in CI |
+| `GOPORT_SERVER_ADDR` | Tunnel server address. Default: `goport.uz:7000`                      |
+| `GOPORT_DOMAIN`      | Domain for public links. Default: `goport.uz`                         |
+| `GOPORT_API_URL`     | API address. Default: `https://back.goport.uz`                        |
+
+To run your own server, see [goport.uz/self-hosting](https://goport.uz/self-hosting).
+
+## What's in this repo
+
+| Folder        | Contents                                                     |
+|---------------|--------------------------------------------------------------|
+| `server/`     | The `goport` CLI, written in Go (despite the folder name)    |
+| `backend/`    | The tunnel server and API, built on PocketBase               |
+| `landing/`    | goport.uz and the account dashboard (Next.js)                |
+| `Installers/` | Windows installer, Homebrew, Scoop and Chocolatey packages   |
+
+Each folder is its own repository, added as a submodule. To build the CLI from source:
+
+```bash
+git clone --recursive https://github.com/muhammad-deve/GoPort.git
+cd GoPort/server
+go build -o goport .
+```
+
+## Contributing
+
+Bug reports and pull requests are welcome. If something breaks, [open an issue](https://github.com/muhammad-deve/GoPort/issues) with the command you ran, your OS, the output of `goport --version`, and the error you saw.
 
 ## License
 
-GoPort is released under the [MIT License](LICENSE).
+[MIT](LICENSE)
