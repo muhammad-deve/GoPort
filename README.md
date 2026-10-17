@@ -42,15 +42,15 @@ Every button downloads the latest release. The Windows installer adds `goport` t
 brew install muhammad-deve/goport/goport
 ```
 
-**Windows:** run the installer from the button above, or use Scoop or Chocolatey:
+**Windows:** run the installer from the button above, or use Chocolatey or Scoop:
+
+```
+choco install goport
+```
 
 ```
 scoop bucket add goport https://github.com/muhammad-deve/scoop-goport
 scoop install goport
-```
-
-```
-choco install goport
 ```
 
 **Linux:**
