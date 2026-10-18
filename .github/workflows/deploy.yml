@@ -17,12 +17,17 @@ jobs:
           script: |
             set -e
             cd ~/personal/GoPort
-            git pull origin main
+            before=$(git rev-parse HEAD)
+            git pull --ff-only origin main
             git submodule sync
             git submodule update --init --remote --recursive
-            docker-compose build
-            # Recreate only the containers whose image or config changed.
-            # goport-backend hosts the tunnel server, so restarting it drops
-            # every live tunnel; a docs-only push must leave it running. The
-            # backend and landing repos deploy their own changes.
-            docker-compose up -d --remove-orphans
+            # The backend and landing repos build and restart their own
+            # containers on every push, so this repo never builds them. A
+            # second build here was redundant: landing is built with
+            # `docker compose`, so this older `docker-compose` could not reuse
+            # it and rebuilt the whole site, and a changed image restarted the
+            # backend, which drops every live tunnel. Only a change to
+            # docker-compose.yml itself is applied, with the existing images.
+            if ! git diff --quiet "$before" HEAD -- docker-compose.yml; then
+              docker-compose up -d --no-build --remove-orphans
+            fi
