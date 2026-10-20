@@ -1,0 +1,124 @@
+{
+  "tool": "tunnelbench/1",
+  "target": "cloudflared-quick",
+  "round": 2,
+  "client_version": "2026.10.2",
+  "region": "connector edges: waw02",
+  "notes": "Quick tunnel (trycloudflare.com), default protocol.",
+  "base_host": "*.trycloudflare.com",
+  "started_at": "2026-10-20T11:45:16.616177Z",
+  "finished_at": "2026-10-20T11:46:56.9963131Z",
+  "env": {
+    "os": "windows",
+    "os_version": "Microsoft Windows [Version 10.0.26200.9457]",
+    "arch": "amd64",
+    "cpu": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
+    "num_cpu": 16,
+    "go_version": "go1.25.5"
+  },
+  "settings": {
+    "latency_requests": 200,
+    "warmup": 5,
+    "concurrency_workers": 10,
+    "concurrency_requests": 1000,
+    "concurrency_max_sec": 90,
+    "download_bytes": 10000000,
+    "downloads": 3,
+    "upload_bytes": 10000000,
+    "uploads": 1,
+    "ws_messages": 100,
+    "ws_message_bytes": 1024
+  },
+  "probes": [
+    {
+      "addr": "doing-roger-donate-soa.trycloudflare.com:443",
+      "attempts": 5,
+      "ok": 5,
+      "min_ms": 78.81,
+      "median_ms": 82.57
+    }
+  ],
+  "latency": {
+    "requests": 200,
+    "ok": 200,
+    "errors": 0,
+    "cold_ms": 403.65,
+    "protocol": "HTTP/2.0",
+    "stats": {
+      "count": 200,
+      "min_ms": 161.69,
+      "median_ms": 176.68,
+      "mean_ms": 179.27,
+      "p95_ms": 200.56,
+      "p99_ms": 220.47,
+      "max_ms": 231.11
+    }
+  },
+  "concurrency": {
+    "workers": 10,
+    "requests": 1000,
+    "sent": 1000,
+    "ok": 1000,
+    "errors": 0,
+    "duration_sec": 17.83,
+    "req_per_sec": 56.09,
+    "stats": {
+      "count": 1000,
+      "min_ms": 150.99,
+      "median_ms": 175.88,
+      "mean_ms": 177.44,
+      "p95_ms": 191.73,
+      "p99_ms": 212.92,
+      "max_ms": 300.5
+    }
+  },
+  "downloads": [
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 215.9,
+      "seconds": 9.804,
+      "mb_per_sec": 1.02
+    },
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 189.22,
+      "seconds": 6.004,
+      "mb_per_sec": 1.67
+    },
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 189.32,
+      "seconds": 4.886,
+      "mb_per_sec": 2.05
+    }
+  ],
+  "uploads": [
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "seconds": 4.747,
+      "mb_per_sec": 2.11
+    }
+  ],
+  "websocket": {
+    "messages": 100,
+    "message_bytes": 1024,
+    "echoed": 100,
+    "failures": 0,
+    "reconnects": 0,
+    "stayed_up": true,
+    "connect_ms": 512.3,
+    "stats": {
+      "count": 100,
+      "min_ms": 151.77,
+      "median_ms": 169.18,
+      "mean_ms": 170.18,
+      "p95_ms": 184.05,
+      "p99_ms": 188.05,
+      "max_ms": 191.16
+    }
+  }
+}

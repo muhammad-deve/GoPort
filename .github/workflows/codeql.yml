@@ -1,0 +1,69 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "41 3 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Go is compiled, so CodeQL watches a real build of every module:
+          # the library here, the CLI (server/), the tunnel server
+          # (backend/app) and the benchmark tool.
+          - language: go
+            build-mode: manual
+          # The website (landing/) and the CLI's inspector UI (server/dashboard).
+          - language: javascript-typescript
+            build-mode: none
+          # The GitHub Actions workflows themselves.
+          - language: actions
+            build-mode: none
+
+    steps:
+      - name: Check out with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Set up Go
+        if: matrix.language == 'go'
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Build Go modules
+        if: matrix.build-mode == 'manual'
+        run: |
+          go build ./...
+          (cd server && go build ./...)
+          (cd backend/app && go build ./...)
+          (cd benchmarks && go build ./...)
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{ matrix.language }}"

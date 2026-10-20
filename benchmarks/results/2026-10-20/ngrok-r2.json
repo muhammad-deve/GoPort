@@ -1,0 +1,127 @@
+{
+  "tool": "tunnelbench/1",
+  "target": "ngrok",
+  "round": 2,
+  "client_version": "3.39.9-msix-stable",
+  "region": "region: 'in', latency: 196.3361ms",
+  "notes": "ngrok agent with default settings.",
+  "base_host": "*.ngrok-free.dev",
+  "started_at": "2026-10-20T11:43:09.6219126Z",
+  "finished_at": "2026-10-20T11:44:58.8980186Z",
+  "env": {
+    "os": "windows",
+    "os_version": "Microsoft Windows [Version 10.0.26200.9457]",
+    "arch": "amd64",
+    "cpu": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
+    "num_cpu": 16,
+    "go_version": "go1.25.5"
+  },
+  "settings": {
+    "latency_requests": 200,
+    "warmup": 5,
+    "concurrency_workers": 10,
+    "concurrency_requests": 1000,
+    "concurrency_max_sec": 90,
+    "download_bytes": 10000000,
+    "downloads": 3,
+    "upload_bytes": 10000000,
+    "uploads": 1,
+    "ws_messages": 100,
+    "ws_message_bytes": 1024,
+    "extra_header_names": [
+      "Ngrok-Skip-Browser-Warning"
+    ]
+  },
+  "probes": [
+    {
+      "addr": "shrewish-lynna-superabundantly.ngrok-free.dev:443",
+      "attempts": 5,
+      "ok": 5,
+      "min_ms": 96.18,
+      "median_ms": 100.35
+    }
+  ],
+  "latency": {
+    "requests": 200,
+    "ok": 200,
+    "errors": 0,
+    "cold_ms": 460.42,
+    "protocol": "HTTP/2.0",
+    "stats": {
+      "count": 200,
+      "min_ms": 168.36,
+      "median_ms": 192.08,
+      "mean_ms": 199.45,
+      "p95_ms": 243.62,
+      "p99_ms": 322.2,
+      "max_ms": 338.88
+    }
+  },
+  "concurrency": {
+    "workers": 10,
+    "requests": 1000,
+    "sent": 1000,
+    "ok": 1000,
+    "errors": 0,
+    "duration_sec": 19.75,
+    "req_per_sec": 50.63,
+    "stats": {
+      "count": 1000,
+      "min_ms": 178.41,
+      "median_ms": 195.6,
+      "mean_ms": 196.84,
+      "p95_ms": 207.4,
+      "p99_ms": 229.64,
+      "max_ms": 346.78
+    }
+  },
+  "downloads": [
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 207.51,
+      "seconds": 4.663,
+      "mb_per_sec": 2.14
+    },
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 217.82,
+      "seconds": 4.541,
+      "mb_per_sec": 2.2
+    },
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 210.86,
+      "seconds": 4.774,
+      "mb_per_sec": 2.09
+    }
+  ],
+  "uploads": [
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "seconds": 11.166,
+      "mb_per_sec": 0.9
+    }
+  ],
+  "websocket": {
+    "messages": 100,
+    "message_bytes": 1024,
+    "echoed": 100,
+    "failures": 0,
+    "reconnects": 0,
+    "stayed_up": true,
+    "connect_ms": 511,
+    "stats": {
+      "count": 100,
+      "min_ms": 184,
+      "median_ms": 200.25,
+      "mean_ms": 200.6,
+      "p95_ms": 209.76,
+      "p99_ms": 212.64,
+      "max_ms": 227.88
+    }
+  }
+}

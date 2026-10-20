@@ -1,0 +1,120 @@
+{
+  "tool": "tunnelbench/1",
+  "target": "baseline-localhost",
+  "round": 3,
+  "client_version": "none",
+  "region": "loopback",
+  "notes": "Origin reached directly; no tunnel.",
+  "base_host": "127.0.0.1:18080",
+  "started_at": "2026-10-20T12:06:52.1200509Z",
+  "finished_at": "2026-10-20T12:06:53.899524Z",
+  "env": {
+    "os": "windows",
+    "os_version": "Microsoft Windows [Version 10.0.26200.9457]",
+    "arch": "amd64",
+    "cpu": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
+    "num_cpu": 16,
+    "go_version": "go1.25.5"
+  },
+  "settings": {
+    "latency_requests": 200,
+    "warmup": 5,
+    "concurrency_workers": 10,
+    "concurrency_requests": 1000,
+    "concurrency_max_sec": 90,
+    "download_bytes": 10000000,
+    "downloads": 3,
+    "upload_bytes": 10000000,
+    "uploads": 1,
+    "ws_messages": 100,
+    "ws_message_bytes": 1024
+  },
+  "probes": [
+    {
+      "addr": "127.0.0.1:18080",
+      "attempts": 5,
+      "ok": 5
+    }
+  ],
+  "latency": {
+    "requests": 200,
+    "ok": 200,
+    "errors": 0,
+    "cold_ms": 0.34,
+    "protocol": "HTTP/1.1",
+    "stats": {
+      "count": 200,
+      "min_ms": 0,
+      "median_ms": 0,
+      "mean_ms": 0.06,
+      "p95_ms": 0.52,
+      "p99_ms": 0.53,
+      "max_ms": 0.7
+    }
+  },
+  "concurrency": {
+    "workers": 10,
+    "requests": 1000,
+    "sent": 1000,
+    "ok": 1000,
+    "errors": 0,
+    "duration_sec": 0.02,
+    "req_per_sec": 65446.31,
+    "stats": {
+      "count": 1000,
+      "min_ms": 0,
+      "median_ms": 0,
+      "mean_ms": 0.14,
+      "p95_ms": 0.53,
+      "p99_ms": 1.05,
+      "max_ms": 2.21
+    }
+  },
+  "downloads": [
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 0.51,
+      "seconds": 0.003,
+      "mb_per_sec": 3783.15
+    },
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "seconds": 0.003,
+      "mb_per_sec": 3502.26
+    },
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "seconds": 0.003,
+      "mb_per_sec": 3680.67
+    }
+  ],
+  "uploads": [
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "seconds": 0.003,
+      "mb_per_sec": 3682.83
+    }
+  ],
+  "websocket": {
+    "messages": 100,
+    "message_bytes": 1024,
+    "echoed": 100,
+    "failures": 0,
+    "reconnects": 0,
+    "stayed_up": true,
+    "connect_ms": 0.55,
+    "stats": {
+      "count": 100,
+      "min_ms": 0,
+      "median_ms": 0,
+      "mean_ms": 0.04,
+      "p95_ms": 0.52,
+      "p99_ms": 0.54,
+      "max_ms": 0.57
+    }
+  }
+}

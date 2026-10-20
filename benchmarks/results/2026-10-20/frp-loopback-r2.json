@@ -1,0 +1,128 @@
+{
+  "tool": "tunnelbench/1",
+  "target": "frp-loopback",
+  "round": 2,
+  "client_version": "frp 0.68.1",
+  "region": "loopback",
+  "notes": "Loopback: frps and frpc on the same machine. Software overhead only.",
+  "base_host": "*.frp.test:18081",
+  "started_at": "2026-10-20T11:42:35.6988122Z",
+  "finished_at": "2026-10-20T11:42:38.1902999Z",
+  "env": {
+    "os": "windows",
+    "os_version": "Microsoft Windows [Version 10.0.26200.9457]",
+    "arch": "amd64",
+    "cpu": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
+    "num_cpu": 16,
+    "go_version": "go1.25.5"
+  },
+  "settings": {
+    "latency_requests": 200,
+    "warmup": 5,
+    "concurrency_workers": 10,
+    "concurrency_requests": 1000,
+    "concurrency_max_sec": 90,
+    "download_bytes": 10000000,
+    "downloads": 3,
+    "upload_bytes": 10000000,
+    "uploads": 1,
+    "ws_messages": 100,
+    "ws_message_bytes": 1024,
+    "host_override": "bench.frp.test"
+  },
+  "probes": [
+    {
+      "addr": "127.0.0.1:18081",
+      "attempts": 5,
+      "ok": 5
+    },
+    {
+      "addr": "127.0.0.1:17000",
+      "attempts": 5,
+      "ok": 5
+    }
+  ],
+  "latency": {
+    "requests": 200,
+    "ok": 200,
+    "errors": 0,
+    "cold_ms": 18.73,
+    "protocol": "HTTP/1.1",
+    "stats": {
+      "count": 200,
+      "min_ms": 0,
+      "median_ms": 0.51,
+      "mean_ms": 0.27,
+      "p95_ms": 0.54,
+      "p99_ms": 0.63,
+      "max_ms": 1.1
+    }
+  },
+  "concurrency": {
+    "workers": 10,
+    "requests": 1000,
+    "sent": 1000,
+    "ok": 1000,
+    "errors": 0,
+    "duration_sec": 0.07,
+    "req_per_sec": 15077.2,
+    "stats": {
+      "count": 1000,
+      "min_ms": 0,
+      "median_ms": 0.52,
+      "mean_ms": 0.62,
+      "p95_ms": 1.45,
+      "p99_ms": 4.2,
+      "max_ms": 14.98
+    }
+  },
+  "downloads": [
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 1.05,
+      "seconds": 0.016,
+      "mb_per_sec": 637.41
+    },
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 0.51,
+      "seconds": 0.014,
+      "mb_per_sec": 703.94
+    },
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 0.55,
+      "seconds": 0.015,
+      "mb_per_sec": 685.8
+    }
+  ],
+  "uploads": [
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "seconds": 0.031,
+      "mb_per_sec": 325.58
+    }
+  ],
+  "websocket": {
+    "messages": 100,
+    "message_bytes": 1024,
+    "echoed": 100,
+    "failures": 0,
+    "reconnects": 0,
+    "stayed_up": true,
+    "connect_ms": 1.02,
+    "stats": {
+      "count": 100,
+      "min_ms": 0,
+      "median_ms": 0,
+      "mean_ms": 0.15,
+      "p95_ms": 0.52,
+      "p99_ms": 0.53,
+      "max_ms": 0.54
+    }
+  }
+}

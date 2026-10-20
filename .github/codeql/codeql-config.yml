@@ -1,0 +1,9 @@
+name: GoPort CodeQL config
+
+# Built or vendored output, not source. server/tunnel/dashboard_dist is the
+# inspector UI's static export, embedded into the CLI binary.
+paths-ignore:
+  - server/tunnel/dashboard_dist
+  - "**/node_modules"
+  - "**/.next"
+  - "**/out"

@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    name: Go (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: library
+            dir: .
+          - name: benchmarks
+            dir: benchmarks
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache-dependency-path: ${{ matrix.dir }}/go.sum
+
+      # Only files tracked by this repository; submodule code is formatted in
+      # its own repository.
+      - name: Check formatting
+        working-directory: ${{ matrix.dir }}
+        run: |
+          unformatted=$(git ls-files -z -- '*.go' | xargs -0 -r gofmt -l)
+          if [ -n "$unformatted" ]; then
+            echo "These files need gofmt:"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      - name: Vet
+        working-directory: ${{ matrix.dir }}
+        run: go vet ./...
+
+      - name: Test
+        working-directory: ${{ matrix.dir }}
+        run: go test -race ./...

@@ -1,0 +1,128 @@
+{
+  "tool": "tunnelbench/1",
+  "target": "goport-selfhosted-loopback",
+  "round": 3,
+  "client_version": "0.1.9",
+  "region": "loopback",
+  "notes": "Loopback: server and CLI on the same machine; plain HTTP to the server, no nginx or TLS. Software overhead only.",
+  "base_host": "*.bench.test:8090",
+  "started_at": "2026-10-20T12:06:59.8094199Z",
+  "finished_at": "2026-10-20T12:07:02.6969033Z",
+  "env": {
+    "os": "windows",
+    "os_version": "Microsoft Windows [Version 10.0.26200.9457]",
+    "arch": "amd64",
+    "cpu": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
+    "num_cpu": 16,
+    "go_version": "go1.25.5"
+  },
+  "settings": {
+    "latency_requests": 200,
+    "warmup": 5,
+    "concurrency_workers": 10,
+    "concurrency_requests": 1000,
+    "concurrency_max_sec": 90,
+    "download_bytes": 10000000,
+    "downloads": 3,
+    "upload_bytes": 10000000,
+    "uploads": 1,
+    "ws_messages": 100,
+    "ws_message_bytes": 1024,
+    "host_override": "80td8t.bench.test"
+  },
+  "probes": [
+    {
+      "addr": "127.0.0.1:8090",
+      "attempts": 5,
+      "ok": 5
+    },
+    {
+      "addr": "127.0.0.1:7000",
+      "attempts": 5,
+      "ok": 5
+    }
+  ],
+  "latency": {
+    "requests": 200,
+    "ok": 200,
+    "errors": 0,
+    "cold_ms": 5.08,
+    "protocol": "HTTP/1.1",
+    "stats": {
+      "count": 200,
+      "min_ms": 0.51,
+      "median_ms": 0.52,
+      "mean_ms": 0.78,
+      "p95_ms": 1.05,
+      "p99_ms": 4.23,
+      "max_ms": 11.34
+    }
+  },
+  "concurrency": {
+    "workers": 10,
+    "requests": 1000,
+    "sent": 1000,
+    "ok": 1000,
+    "errors": 0,
+    "duration_sec": 0.3,
+    "req_per_sec": 3357.56,
+    "stats": {
+      "count": 1000,
+      "min_ms": 0.52,
+      "median_ms": 3.11,
+      "mean_ms": 2.96,
+      "p95_ms": 3.8,
+      "p99_ms": 4.72,
+      "max_ms": 6.36
+    }
+  },
+  "downloads": [
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 19.5,
+      "seconds": 0.042,
+      "mb_per_sec": 240.86
+    },
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 41.32,
+      "seconds": 0.049,
+      "mb_per_sec": 205.48
+    },
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 24.38,
+      "seconds": 0.031,
+      "mb_per_sec": 320.88
+    }
+  ],
+  "uploads": [
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "seconds": 0.056,
+      "mb_per_sec": 178.71
+    }
+  ],
+  "websocket": {
+    "messages": 100,
+    "message_bytes": 1024,
+    "echoed": 100,
+    "failures": 0,
+    "reconnects": 0,
+    "stayed_up": true,
+    "connect_ms": 1.07,
+    "stats": {
+      "count": 100,
+      "min_ms": 0,
+      "median_ms": 0,
+      "mean_ms": 0.11,
+      "p95_ms": 0.52,
+      "p99_ms": 0.53,
+      "max_ms": 0.53
+    }
+  }
+}

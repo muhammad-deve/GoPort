@@ -1,0 +1,134 @@
+{
+  "tool": "tunnelbench/1",
+  "target": "localtunnel",
+  "round": 3,
+  "client_version": "localtunnel 2.0.2 (npm)",
+  "region": "public server (https://localtunnel.me)",
+  "notes": "Public LocalTunnel server.",
+  "base_host": "*.loca.lt",
+  "started_at": "2026-10-20T11:58:43.4978071Z",
+  "finished_at": "2026-10-20T12:06:46.7234931Z",
+  "env": {
+    "os": "windows",
+    "os_version": "Microsoft Windows [Version 10.0.26200.9457]",
+    "arch": "amd64",
+    "cpu": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
+    "num_cpu": 16,
+    "go_version": "go1.25.5"
+  },
+  "settings": {
+    "latency_requests": 200,
+    "warmup": 5,
+    "concurrency_workers": 10,
+    "concurrency_requests": 1000,
+    "concurrency_max_sec": 90,
+    "download_bytes": 10000000,
+    "downloads": 3,
+    "upload_bytes": 10000000,
+    "uploads": 1,
+    "ws_messages": 100,
+    "ws_message_bytes": 1024,
+    "extra_header_names": [
+      "Bypass-Tunnel-Reminder"
+    ]
+  },
+  "probes": [
+    {
+      "addr": "dry-forks-learn.loca.lt:443",
+      "attempts": 5,
+      "ok": 5,
+      "min_ms": 199.81,
+      "median_ms": 206.13
+    }
+  ],
+  "latency": {
+    "requests": 200,
+    "ok": 200,
+    "errors": 0,
+    "cold_ms": 2132.17,
+    "protocol": "HTTP/1.1",
+    "stats": {
+      "count": 200,
+      "min_ms": 409.02,
+      "median_ms": 731.91,
+      "mean_ms": 1483.53,
+      "p95_ms": 3853.26,
+      "p99_ms": 4238.15,
+      "max_ms": 4442.19
+    }
+  },
+  "concurrency": {
+    "workers": 10,
+    "requests": 1000,
+    "sent": 247,
+    "time_capped": true,
+    "ok": 238,
+    "errors": 9,
+    "error_log": [
+      {
+        "error": "status 502: Bad Gateway",
+        "count": 9
+      }
+    ],
+    "duration_sec": 97.69,
+    "req_per_sec": 2.44,
+    "stats": {
+      "count": 238,
+      "min_ms": 378.08,
+      "median_ms": 2134.7,
+      "mean_ms": 3476.54,
+      "p95_ms": 9491.68,
+      "p99_ms": 10396.43,
+      "max_ms": 11229.72
+    }
+  },
+  "downloads": [
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 808.32,
+      "seconds": 3.752,
+      "mb_per_sec": 2.67
+    },
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 1235.9,
+      "seconds": 2.782,
+      "mb_per_sec": 3.59
+    },
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "ttfb_ms": 979.63,
+      "seconds": 3.74,
+      "mb_per_sec": 2.67
+    }
+  ],
+  "uploads": [
+    {
+      "bytes": 10000000,
+      "ok": true,
+      "seconds": 10.818,
+      "mb_per_sec": 0.92
+    }
+  ],
+  "websocket": {
+    "messages": 100,
+    "message_bytes": 1024,
+    "echoed": 100,
+    "failures": 0,
+    "reconnects": 0,
+    "stayed_up": true,
+    "connect_ms": 3697.74,
+    "stats": {
+      "count": 100,
+      "min_ms": 394.75,
+      "median_ms": 437.87,
+      "mean_ms": 548.36,
+      "p95_ms": 974.74,
+      "p99_ms": 1491.59,
+      "max_ms": 2208.89
+    }
+  }
+}
