@@ -156,7 +156,7 @@ go build -o goport .
 
 Bug reports and pull requests are welcome. If something breaks, [open an issue](https://github.com/muhammad-deve/GoPort/issues) with the command you ran, your OS, the output of `goport --version`, and the error you saw.
 
-[Contributing](CONTRIBUTING.md) · [Getting help](SUPPORT.md) · [Security](SECURITY.md) · [Roadmap](ROADMAP.md) · [Changelog](CHANGELOG.md)
+[Contributing](CONTRIBUTING.md) · [Code of conduct](CODE_OF_CONDUCT.md) · [Getting help](SUPPORT.md) · [Security](SECURITY.md) · [Roadmap](ROADMAP.md) · [Changelog](CHANGELOG.md)
 
 ## License
 

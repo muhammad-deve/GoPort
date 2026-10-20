@@ -1,6 +1,6 @@
 # Contributing to GoPort
 
-Thanks for helping. Bug reports, fixes and documentation improvements are all welcome.
+Thanks for helping. Bug reports, fixes and documentation improvements are all welcome. Everyone taking part is expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Where the code lives
 

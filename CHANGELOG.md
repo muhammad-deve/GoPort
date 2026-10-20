@@ -11,7 +11,7 @@ Notable changes to GoPort, following [Keep a Changelog](https://keepachangelog.c
 ### Added
 
 - `SECURITY.md` and [`docs/security-model.md`](docs/security-model.md): how to report a vulnerability, what each connection protects, and what the server can see and log.
-- `CONTRIBUTING.md`, `SUPPORT.md`, `ROADMAP.md` and this changelog.
+- `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1), `SUPPORT.md`, `ROADMAP.md` and this changelog.
 - CI checks:
   - `go vet` and `go test` for the root library and the benchmark tool
   - govulncheck
