@@ -8,8 +8,14 @@ Notable changes to GoPort, following [Keep a Changelog](https://keepachangelog.c
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-20
+
 ### Added
 
+- `goport share <path>` publishes a file or directory through an expiring, optional password-protected link with previews, range downloads and ZIP streaming.
+- Authenticated cloud shares can be uploaded, managed and revoked from the dashboard, with storage quotas, encrypted link tokens and automatic retention cleanup.
+- Public share pages at `/s/[token]` support password unlocks, safe previews and downloads.
+- [`docs/share.md`](docs/share.md) documents local and hosted sharing, limits, privacy and deployment configuration.
 - `SECURITY.md` and [`docs/security-model.md`](docs/security-model.md): how to report a vulnerability, what each connection protects, and what the server can see and log.
 - `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1), `SUPPORT.md`, `ROADMAP.md` and this changelog.
 - CI checks:
@@ -142,7 +148,8 @@ Same commit as 0.1.1, so there are no changes.
 - A local request inspector with replay.
 - Docker Compose and nginx configuration for running the server.
 
-[Unreleased]: https://github.com/muhammad-deve/GoPort/compare/v0.1.9...HEAD
+[Unreleased]: https://github.com/muhammad-deve/GoPort/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/muhammad-deve/GoPort/compare/v0.1.9...v0.2.0
 [0.1.9]: https://github.com/muhammad-deve/GoPort/compare/v0.1.8...v0.1.9
 [0.1.8]: https://github.com/muhammad-deve/GoPort/compare/v0.1.7...v0.1.8
 [0.1.7]: https://github.com/muhammad-deve/GoPort/compare/v0.1.6...v0.1.7

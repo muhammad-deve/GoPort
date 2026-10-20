@@ -112,6 +112,22 @@ goport http 8080 --custom myapp    # https://myapp.goport.uz
 
 **WebSockets** work too, so things like Next.js hot reload behave normally through the tunnel.
 
+## File sharing
+
+Share a local folder without uploading its contents:
+
+```bash
+goport share ./documents
+goport share ./documents --password
+goport share ./documents --expires 2h
+```
+
+The CLI starts a read-only browser on a random loopback port and exposes only the selected folder through a token-scoped HTTPS route. Hidden files, common secret files, private keys, and symlink escapes are blocked. Downloads and ZIP archives stream from the computer running the CLI, so that computer must remain online. Press `Ctrl+C` to revoke access immediately.
+
+For persistent sharing, sign in to the dashboard and open **Share**. Cloud files are stored by the GoPort backend, default to a seven-day expiration, and remain available while the uploader is offline. Owners can copy links, change expiration or password protection, revoke links, and delete both metadata and stored content.
+
+See [GoPort Share documentation](docs/share.md) for security details, limits, and self-hosting configuration.
+
 ## How it works
 
 <p align="center">
