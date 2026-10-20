@@ -26,7 +26,7 @@ This repository ties GoPort's parts together. Most code lives in separate reposi
 - the output of `goport --version`
 - what you expected to happen and what happened instead, including the full error
 
-**Security problems:** don't open an issue. Follow [SECURITY.md](SECURITY.md).
+**Security problems:** don't open an issue. Follow [SECURITY.md](SECURITY.md). For account or billing help, see [SUPPORT.md](SUPPORT.md).
 
 ## Getting the code
 
