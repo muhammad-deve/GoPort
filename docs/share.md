@@ -38,7 +38,9 @@ A link opens in one of two ways:
 
 Every complete delivery of the file counts as a download, whether it is previewed or saved. Uploads stop for everyone once all cloud files together reach `SHARE_TOTAL_STORAGE_BYTES`, which protects the server disk. Cloud uploads need a verified account with a regular (not disposable) email address, and at most `SHARE_FREE_UPLOADERS_PER_IP` different Free accounts may upload from one IP address per day.
 
-The dashboard uploads in 8 MB chunks. Each chunk is retried on failure, and an upload interrupted for 30 minutes is discarded. The backend rejects executable and active-web formats such as HTML, JavaScript, SVG, shell scripts, and native executables. Images, plain text, and PDFs may be previewed; other formats are forced to download with `nosniff` and a restrictive content security policy.
+The dashboard uploads in 8 MB chunks. Each chunk is retried on failure, and an upload interrupted for 30 minutes is discarded. The backend rejects JavaScript, SVG, shell scripts, and native executables. Images, plain text, PDFs, and HTML pages may be previewed; other formats are forced to download with `nosniff` and a restrictive content security policy.
+
+HTML is accepted only as `.html` or `.htm`, and HTML disguised under any other name is refused. A shared page is always served with a `sandbox` content security policy, both in the share page preview and through a direct link: it runs with an opaque origin, so its scripts can't read goport.uz storage (where the dashboard keeps the login token) or any GoPort cookie, it can't submit forms, and it can't navigate the window around it. Scripts, styles, images, and fonts may load, so ordinary pages render normally. Downloads of HTML files are sent as attachments.
 
 Management endpoints require a valid PocketBase user session and enforce ownership server-side. Public identifiers use 256 bits of randomness. Lookup hashes are stored as SHA-256; the recoverable dashboard copy is encrypted with AES-GCM using `SHARE_SIGNING_KEY`. Passwords use bcrypt and successful unlocks create a short-lived HttpOnly cookie. Concurrent uploads and downloads are limited in memory.
 
