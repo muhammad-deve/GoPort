@@ -2,10 +2,17 @@ package goport
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
 	"net"
 	"net/http"
 	"strconv"
+	"strings"
+	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -92,8 +99,175 @@ func TestReconnectUsesAssignedSubdomainWithoutReset(t *testing.T) {
 	if second.req.Reset {
 		t.Fatalf("reconnect reset = true, want false")
 	}
-	if second.req.Subdomain != "abc123" {
-		t.Fatalf("reconnect subdomain = %q, want abc123", second.req.Subdomain)
+	// Sent as subdomain, the server treated the random name as a custom-name
+	// request and refused free accounts, so they never reconnected.
+	if second.req.Subdomain != "" || second.req.Resume != "abc123" {
+		t.Fatalf("reconnect subdomain = %q, resume = %q; want \"\", abc123", second.req.Subdomain, second.req.Resume)
+	}
+}
+
+func TestReconnectKeepsCustomSubdomain(t *testing.T) {
+	fake := newFakeGoPortServer(t, "myapp", "https://myapp.goport.uz")
+
+	client := New("token", WithServer(fake.addr)).Subdomain("myapp")
+	client.reconnectMin = 10 * time.Millisecond
+	tunnel, err := client.Open(12345)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+	defer tunnel.Close()
+
+	first := fake.nextConn(t)
+	_ = first.session.Close()
+	_ = first.conn.Close()
+
+	second := fake.nextConn(t)
+	if second.req.Subdomain != "myapp" || second.req.Resume != "myapp" {
+		t.Fatalf("reconnect subdomain = %q, resume = %q", second.req.Subdomain, second.req.Resume)
+	}
+}
+
+// The server's reply and its first yamux frame can arrive in one read; a
+// json.Decoder swallowed the frame.
+func TestHandshakeKeepsBytesAfterTheReply(t *testing.T) {
+	local := newLocalHTTPServer(t)
+	ln, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer ln.Close()
+	result := make(chan error, 1)
+	go func() {
+		conn, err := ln.Accept()
+		if err != nil {
+			result <- err
+			return
+		}
+		defer conn.Close()
+		if _, err := bufio.NewReader(conn).ReadSlice('\n'); err != nil {
+			result <- err
+			return
+		}
+		reply, _ := json.Marshal(registrationResponse{Subdomain: "abc123", URL: "https://abc123.goport.uz"})
+		// Hold the reply back so it goes out in the same write as the first frame.
+		session, err := yamux.Server(&prefixConn{Conn: conn, prefix: append(reply, '\n')}, nil)
+		if err != nil {
+			result <- err
+			return
+		}
+		stream, err := session.Open()
+		if err != nil {
+			result <- err
+			return
+		}
+		req, _ := http.NewRequest(http.MethodGet, "http://abc123.goport.uz/ping", nil)
+		if err := req.Write(stream); err != nil {
+			result <- err
+			return
+		}
+		_ = stream.SetDeadline(time.Now().Add(3 * time.Second))
+		resp, err := http.ReadResponse(bufio.NewReader(stream), req)
+		if err == nil && resp.StatusCode != http.StatusCreated {
+			err = fmt.Errorf("status = %d", resp.StatusCode)
+		}
+		result <- err
+	}()
+
+	tunnel, err := New("token", WithServer(ln.Addr().String())).Open(local.port)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+	defer tunnel.Close()
+	select {
+	case err := <-result:
+		if err != nil {
+			t.Fatal(err)
+		}
+	case <-time.After(5 * time.Second):
+		t.Fatal("request through the tunnel timed out")
+	}
+}
+
+// prefixConn sends prefix together with the first write.
+type prefixConn struct {
+	net.Conn
+	prefix []byte
+	once   sync.Once
+}
+
+func (c *prefixConn) Write(p []byte) (int, error) {
+	sent := false
+	c.once.Do(func() {
+		sent = true
+		_, err := c.Conn.Write(append(append([]byte{}, c.prefix...), p...))
+		if err != nil {
+			p = nil
+		}
+	})
+	if sent {
+		return len(p), nil
+	}
+	return c.Conn.Write(p)
+}
+
+func TestPermanentRefusalStopsReconnecting(t *testing.T) {
+	fake := newFakeGoPortServer(t, "abc123", "https://abc123.goport.uz")
+	stopped := make(chan error, 1)
+	client := New("token", WithServer(fake.addr), WithStopHandler(func(err error) { stopped <- err }))
+	client.reconnectMin = 10 * time.Millisecond
+	client.reconnectMax = 20 * time.Millisecond
+	tunnel, err := client.Open(12345)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+	defer tunnel.Close()
+
+	first := fake.nextConn(t)
+	fake.refuseWith("failed to register tunnel: subdomain cannot be resumed: the tunnel was stopped from the dashboard")
+	_ = first.session.Close()
+	_ = first.conn.Close()
+
+	select {
+	case err := <-stopped:
+		var refused *RefusalError
+		if !errors.As(err, &refused) || !refused.Permanent() {
+			t.Fatalf("stop error = %v", err)
+		}
+	case <-time.After(3 * time.Second):
+		t.Fatal("stop handler not called")
+	}
+	time.Sleep(100 * time.Millisecond)
+	if n := fake.refusals.Load(); n != 1 {
+		t.Fatalf("server saw %d refused attempts, want 1", n)
+	}
+}
+
+func TestRefusalPermanence(t *testing.T) {
+	cases := map[string]bool{
+		"failed to register tunnel: authentication required":                                                true,
+		"failed to register tunnel: subdomain cannot be used: it belongs to another account":                true,
+		"failed to register tunnel: subdomain cannot be resumed: the tunnel was stopped from the dashboard": true,
+		"failed to register tunnel: too many tunnel registrations, try again in a minute":                   false,
+		`subdomain "abc123" is currently in use`:                                                            false,
+	}
+	for msg, want := range cases {
+		if got := (&RefusalError{Message: msg}).Permanent(); got != want {
+			t.Errorf("Permanent(%q) = %v, want %v", msg, got, want)
+		}
+	}
+}
+
+func TestBadGatewayHidesLocalDetails(t *testing.T) {
+	var buf bytes.Buffer
+	writeBadGateway(&buf)
+	if strings.Contains(buf.String(), "127.0.0.1") || !strings.HasPrefix(buf.String(), "HTTP/1.1 502") {
+		t.Fatalf("502 response = %q", buf.String())
+	}
+}
+
+func TestYamuxLogsAreDiscardedByDefault(t *testing.T) {
+	if New("token").logOutput != io.Discard || sessionConfig(nil).LogOutput != io.Discard {
+		t.Fatal("yamux would log to the host app's stderr")
 	}
 }
 
@@ -148,6 +322,17 @@ type fakeGoPortServer struct {
 	addr   string
 	ln     net.Listener
 	events chan fakeConn
+
+	mu       sync.Mutex
+	refusal  string
+	refusals atomic.Int32
+}
+
+// refuseWith makes every later registration fail with msg.
+func (f *fakeGoPortServer) refuseWith(msg string) {
+	f.mu.Lock()
+	f.refusal = msg
+	f.mu.Unlock()
 }
 
 type fakeConn struct {
@@ -179,6 +364,16 @@ func newFakeGoPortServer(t *testing.T, subdomain, publicURL string) *fakeGoPortS
 
 			var req registrationRequest
 			if err := json.NewDecoder(conn).Decode(&req); err != nil {
+				_ = conn.Close()
+				continue
+			}
+
+			f.mu.Lock()
+			refusal := f.refusal
+			f.mu.Unlock()
+			if refusal != "" {
+				f.refusals.Add(1)
+				_ = json.NewEncoder(conn).Encode(registrationResponse{Error: refusal})
 				_ = conn.Close()
 				continue
 			}

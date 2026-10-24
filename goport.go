@@ -2,6 +2,7 @@
 package goport
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
@@ -12,6 +13,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/hashicorp/yamux"
@@ -24,7 +26,49 @@ const (
 	defaultDialTimeout  = 10 * time.Second
 	defaultReconnectMin = time.Second
 	defaultReconnectMax = 30 * time.Second
+	rateLimitedDelay    = time.Minute
 )
+
+// permanentRefusals are server refusals that retrying cannot fix; the tunnel
+// stops reconnecting when it gets one. Kept in step with the CLI.
+var permanentRefusals = []string{
+	"authentication required",
+	"available on pro",
+	"traffic limit",
+	"outside your plan allowance",
+	"cannot be used together",
+	"subdomain must",
+	"subdomain cannot",
+	"subdomain can only",
+	"is reserved",
+	"missing port",
+	"belongs to another account",
+	"stopped from the dashboard",
+}
+
+// RefusalError is the server refusing a tunnel, as opposed to the network
+// failing on the way.
+type RefusalError struct {
+	Message string
+}
+
+func (e *RefusalError) Error() string { return "goport: " + e.Message }
+
+// Permanent reports whether retrying cannot help (bad token, plan, name, or
+// the tunnel was stopped from the dashboard).
+func (e *RefusalError) Permanent() bool {
+	msg := strings.ToLower(e.Message)
+	for _, fragment := range permanentRefusals {
+		if strings.Contains(msg, fragment) {
+			return true
+		}
+	}
+	return false
+}
+
+func (e *RefusalError) rateLimited() bool {
+	return strings.Contains(strings.ToLower(e.Message), "too many tunnel registrations")
+}
 
 // Tunnel is an active public tunnel to a local port.
 type Tunnel interface {
@@ -42,6 +86,25 @@ func WithServer(addr string) Option {
 	}
 }
 
+// WithLogOutput sends the tunnel's internal (yamux) log lines to w. By
+// default they are discarded so nothing lands on the host app's stderr.
+func WithLogOutput(w io.Writer) Option {
+	return func(c *Client) {
+		if w != nil {
+			c.logOutput = w
+		}
+	}
+}
+
+// WithStopHandler sets fn to be called, once and on its own goroutine, when
+// the tunnel stops reconnecting because the server refused it for good (for
+// example, it was stopped from the dashboard). err is a *RefusalError.
+func WithStopHandler(fn func(err error)) Option {
+	return func(c *Client) {
+		c.onStop = fn
+	}
+}
+
 // Client is a small builder for opening GoPort tunnels.
 type Client struct {
 	token        string
@@ -51,6 +114,8 @@ type Client struct {
 	dialTimeout  time.Duration
 	reconnectMin time.Duration
 	reconnectMax time.Duration
+	logOutput    io.Writer
+	onStop       func(error)
 }
 
 // New returns a tunnel client builder authenticated with token.
@@ -61,6 +126,7 @@ func New(token string, opts ...Option) *Client {
 		dialTimeout:  defaultDialTimeout,
 		reconnectMin: defaultReconnectMin,
 		reconnectMax: defaultReconnectMax,
+		logOutput:    io.Discard,
 	}
 	for _, opt := range opts {
 		if opt != nil {
@@ -105,11 +171,10 @@ func (c *Client) Open(port int) (Tunnel, error) {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	t := &clientTunnel{
-		cfg:       cfg,
-		port:      port,
-		localAddr: net.JoinHostPort("127.0.0.1", strconv.Itoa(port)),
-		ctx:       ctx,
-		cancel:    cancel,
+		cfg:    cfg,
+		port:   port,
+		ctx:    ctx,
+		cancel: cancel,
 	}
 	if err := t.connect(true); err != nil {
 		cancel()
@@ -131,6 +196,8 @@ func (c *Client) config() clientConfig {
 		dialTimeout:  c.dialTimeout,
 		reconnectMin: c.reconnectMin,
 		reconnectMax: c.reconnectMax,
+		logOutput:    c.logOutput,
+		onStop:       c.onStop,
 	}
 }
 
@@ -142,6 +209,8 @@ type clientConfig struct {
 	dialTimeout  time.Duration
 	reconnectMin time.Duration
 	reconnectMax time.Duration
+	logOutput    io.Writer
+	onStop       func(error)
 }
 
 type registrationRequest struct {
@@ -150,6 +219,24 @@ type registrationRequest struct {
 	Subdomain string `json:"subdomain,omitempty"`
 	Reset     bool   `json:"reset,omitempty"`
 	Token     string `json:"token,omitempty"`
+	// Resume asks for the subdomain held before the connection dropped. It
+	// is not a custom-name request, so it works on the free plan too.
+	Resume string `json:"resume,omitempty"`
+}
+
+// sessionConfig matches the CLI: keepalives catch dead connections, a long
+// write timeout tolerates slow uplinks, and yamux logs go to logOutput rather
+// than the host app's stderr.
+func sessionConfig(logOutput io.Writer) *yamux.Config {
+	cfg := yamux.DefaultConfig()
+	cfg.EnableKeepAlive = true
+	cfg.KeepAliveInterval = 20 * time.Second
+	cfg.ConnectionWriteTimeout = 30 * time.Second
+	if logOutput == nil {
+		logOutput = io.Discard
+	}
+	cfg.LogOutput = logOutput
+	return cfg
 }
 
 type registrationResponse struct {
@@ -159,9 +246,8 @@ type registrationResponse struct {
 }
 
 type clientTunnel struct {
-	cfg       clientConfig
-	port      int
-	localAddr string
+	cfg  clientConfig
+	port int
 
 	ctx    context.Context
 	cancel context.CancelFunc
@@ -175,6 +261,8 @@ type clientTunnel struct {
 	session           *yamux.Session
 	url               string
 	assignedSubdomain string
+	// preferV6 is set once the local app answered on [::1] but not 127.0.0.1.
+	preferV6 bool
 }
 
 func (t *clientTunnel) URL() string {
@@ -213,14 +301,28 @@ func (t *clientTunnel) run() {
 		}
 
 		for t.ctx.Err() == nil {
-			if err := t.connect(false); err == nil {
+			err := t.connect(false)
+			if err == nil {
 				backoff = t.cfg.reconnectMin
 				if backoff <= 0 {
 					backoff = defaultReconnectMin
 				}
 				break
 			}
-			if !t.wait(backoff) {
+			wait := backoff
+			var refused *RefusalError
+			if errors.As(err, &refused) {
+				if refused.Permanent() {
+					if t.cfg.onStop != nil {
+						go t.cfg.onStop(err)
+					}
+					return
+				}
+				if refused.rateLimited() {
+					wait = max(wait, rateLimitedDelay)
+				}
+			}
+			if !t.wait(wait) {
 				return
 			}
 			backoff = nextBackoff(backoff, t.cfg.reconnectMax)
@@ -270,15 +372,17 @@ func (t *clientTunnel) connect(initial bool) error {
 	}
 
 	req := registrationRequest{
-		Type:  "http",
-		Port:  strconv.Itoa(t.port),
-		Token: t.cfg.token,
+		Type:      "http",
+		Port:      strconv.Itoa(t.port),
+		Token:     t.cfg.token,
+		Subdomain: t.cfg.subdomain,
 	}
 	if initial {
-		req.Subdomain = t.cfg.subdomain
 		req.Reset = t.cfg.reset
 	} else {
-		req.Subdomain = t.reconnectSubdomain()
+		// The assigned name goes in Resume: as Subdomain the server treats it
+		// as a custom-name request, which free accounts can't make.
+		req.Resume = t.reconnectSubdomain()
 	}
 
 	if err := json.NewEncoder(conn).Encode(req); err != nil {
@@ -286,14 +390,22 @@ func (t *clientTunnel) connect(initial bool) error {
 		return fmt.Errorf("goport: send handshake: %w", err)
 	}
 
+	// The reply is one JSON line, and yamux frames can follow in the same
+	// read. Read exactly that line and hand the rest of the buffer to yamux.
+	reader := bufio.NewReader(conn)
+	line, err := reader.ReadSlice('\n')
+	if err != nil {
+		_ = conn.Close()
+		return fmt.Errorf("goport: read handshake: %w", err)
+	}
 	var resp registrationResponse
-	if err := json.NewDecoder(conn).Decode(&resp); err != nil {
+	if err := json.Unmarshal(line, &resp); err != nil {
 		_ = conn.Close()
 		return fmt.Errorf("goport: read handshake: %w", err)
 	}
 	if resp.Error != "" {
 		_ = conn.Close()
-		return fmt.Errorf("goport: %s", resp.Error)
+		return &RefusalError{Message: resp.Error}
 	}
 
 	publicURL := responseURL(resp)
@@ -304,7 +416,7 @@ func (t *clientTunnel) connect(initial bool) error {
 
 	_ = conn.SetDeadline(time.Time{})
 
-	session, err := yamux.Client(conn, nil)
+	session, err := yamux.Client(&bufferedConn{Conn: conn, r: reader}, sessionConfig(t.cfg.logOutput))
 	if err != nil {
 		_ = conn.Close()
 		return fmt.Errorf("goport: start yamux client: %w", err)
@@ -327,6 +439,15 @@ func (t *clientTunnel) connect(initial bool) error {
 
 	return nil
 }
+
+// bufferedConn reads through the handshake's reader, so bytes it already
+// buffered past the reply reach yamux first.
+type bufferedConn struct {
+	net.Conn
+	r *bufio.Reader
+}
+
+func (c *bufferedConn) Read(p []byte) (int, error) { return c.r.Read(p) }
 
 func (t *clientTunnel) reconnectSubdomain() string {
 	t.mu.RLock()
@@ -372,15 +493,47 @@ func (t *clientTunnel) wait(d time.Duration) bool {
 func (t *clientTunnel) handleStream(stream net.Conn) {
 	defer stream.Close()
 
-	dialer := net.Dialer{Timeout: t.cfg.dialTimeout}
-	localConn, err := dialer.DialContext(t.ctx, "tcp", t.localAddr)
+	localConn, err := t.dialLocal()
 	if err != nil {
-		writeBadGateway(stream, t.localAddr, err)
+		writeBadGateway(stream)
 		return
 	}
 	defer localConn.Close()
 
 	proxy(stream, localConn)
+}
+
+// dialLocal connects to the local app on 127.0.0.1, or on [::1] when that
+// refuses (some dev servers listen on IPv6 loopback only). The address that
+// answered is tried first next time.
+func (t *clientTunnel) dialLocal() (net.Conn, error) {
+	port := strconv.Itoa(t.port)
+	addrs := []string{net.JoinHostPort("127.0.0.1", port), net.JoinHostPort("::1", port)}
+	t.mu.RLock()
+	if t.preferV6 {
+		addrs[0], addrs[1] = addrs[1], addrs[0]
+	}
+	t.mu.RUnlock()
+
+	dialer := net.Dialer{Timeout: t.cfg.dialTimeout}
+	conn, err := dialer.DialContext(t.ctx, "tcp", addrs[0])
+	if err == nil || !isConnRefused(err) {
+		return conn, err
+	}
+	conn, otherErr := dialer.DialContext(t.ctx, "tcp", addrs[1])
+	if otherErr != nil {
+		return nil, err
+	}
+	t.mu.Lock()
+	t.preferV6 = strings.HasPrefix(addrs[1], "[")
+	t.mu.Unlock()
+	return conn, nil
+}
+
+// isConnRefused also matches WSAECONNREFUSED, which Go does not map to
+// syscall.ECONNREFUSED on Windows.
+func isConnRefused(err error) bool {
+	return errors.Is(err, syscall.ECONNREFUSED) || errors.Is(err, syscall.Errno(10061))
 }
 
 func proxy(a, b net.Conn) {
@@ -408,8 +561,10 @@ func closeWrite(c net.Conn) {
 	_ = c.Close()
 }
 
-func writeBadGateway(w io.Writer, localAddr string, err error) {
-	body := fmt.Sprintf("failed to connect to %s: %v\n", localAddr, err)
+// writeBadGateway answers a visitor when the local app can't be reached. The
+// local port and the OS error are not shown to visitors.
+func writeBadGateway(w io.Writer) {
+	const body = "The local app didn't respond.\n"
 	_, _ = fmt.Fprintf(w, "HTTP/1.1 502 Bad Gateway\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s", len(body), body)
 }
 
