@@ -8,6 +8,41 @@ Notable changes to GoPort, following [Keep a Changelog](https://keepachangelog.c
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-24
+
+### Security
+
+- The local inspector (`127.0.0.1:4040`) answers only its own dashboard. It checks the Host and Origin headers, refuses cross-site API calls and can't be framed. Earlier versions let other web pages read captured traffic, so update the CLI.
+- `goport share` refuses Windows short (8.3) names and alternate data streams that could reach blocked files, and locks out visitors who keep guessing a password.
+- "Copy as curl" in the inspector quotes values safely for bash, fish, PowerShell and cmd.
+- Release binaries are fully static, built with the newest Go release, and carry signed build provenance (`gh attestation verify <file> --repo muhammad-deve/GoPort`).
+- The hosted service hardens sign-in, one-time codes, billing, file sharing and tunnel routing, and moves to PocketBase 0.39.
+
+### Added
+
+- `curl -fsSL https://goport.uz/install.sh | sh` installs the CLI on Linux and macOS and checks its SHA-256 checksum.
+- `goport http --inspect=false` runs a tunnel without the inspector.
+- `goport auth` without an argument asks for the token with hidden input, or reads it from stdin, so it stays out of shell history.
+
+### Changed
+
+- Request and response bodies stream through the tunnel instead of being held in memory. The inspector keeps the first 256 KiB of each.
+- Tunnels pass CORS preflights, every `/api/collections/...` path and bodies up to 50 MB through to your app, and no longer add GoPort's own CORS and framing headers to its responses.
+- A subdomain stays with its owner. Another account can claim it only after 90 days without use.
+- "Stop" in the dashboard keeps the tunnel down for 60 seconds instead of the CLI reconnecting at once, and deleting a token ends the tunnels it opened.
+- Visitors see generic error pages when the local app fails; the CLI prints the real reason.
+- `goport http` and `goport share` exit with status 1 on failure, and ports must be 1–65535. The unfinished `goport tcp` command is hidden.
+
+### Fixed
+
+- Monthly traffic counted only the first few seconds of each hour. Every request now counts toward the plan limit.
+- Deleting an offline tunnel no longer resets the account's monthly traffic.
+- Streaming responses such as server-sent events are flushed as they arrive, and WebSocket traffic is counted.
+- Closing an inspector tab could crash the CLI.
+- Apps that listen only on IPv6 localhost (`[::1]`) are reached.
+- Text from the server or from visitors can't inject terminal control sequences. Windows consoles show colours or plain text.
+- The Go library resumes the same tunnel after a reconnect and stops retrying after a permanent refusal.
+
 ## [0.2.0] - 2026-10-20
 
 ### Added
@@ -148,7 +183,8 @@ Same commit as 0.1.1, so there are no changes.
 - A local request inspector with replay.
 - Docker Compose and nginx configuration for running the server.
 
-[Unreleased]: https://github.com/muhammad-deve/GoPort/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/muhammad-deve/GoPort/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/muhammad-deve/GoPort/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/muhammad-deve/GoPort/compare/v0.1.9...v0.2.0
 [0.1.9]: https://github.com/muhammad-deve/GoPort/compare/v0.1.8...v0.1.9
 [0.1.8]: https://github.com/muhammad-deve/GoPort/compare/v0.1.7...v0.1.8
