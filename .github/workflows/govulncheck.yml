@@ -27,12 +27,12 @@ jobs:
 
     steps:
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # The latest Go release, so standard-library findings reflect a
       # supported toolchain rather than the minimum in go.mod.
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v7
         with:
           go-version: stable
           check-latest: true
@@ -62,12 +62,12 @@ jobs:
 
     steps:
       - name: Check out with submodules
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: true
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v7
         with:
           go-version: stable
           check-latest: true
