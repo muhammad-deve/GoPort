@@ -15,27 +15,27 @@ jobs:
 
     steps:
       - name: Check out the release tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: recursive
           persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
 
       # The newest supported Go, not the minimum in go.mod: the CLI parses
       # untrusted HTTP, so it needs the latest net/http fixes.
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v7
         with:
           go-version: stable
           check-latest: true
           cache-dependency-path: server/go.sum
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         with:
           version: 10.15.1
           run_install: false
@@ -53,7 +53,7 @@ jobs:
         run: make -C server release
 
       - name: Upload binaries
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: binaries
           path: server/dist/goport-*
@@ -68,12 +68,12 @@ jobs:
     steps:
       # Only Installers/Windows is needed here; the binary comes from the build job.
       - name: Check out the release tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
 
       - name: Download binaries
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: binaries
           path: server/dist
@@ -101,7 +101,7 @@ jobs:
           goport --version
 
       - name: Upload installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: installer
           path: server/dist/goport-windows-setup.exe
@@ -117,7 +117,7 @@ jobs:
 
     steps:
       - name: Download release assets
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: server/dist
           merge-multiple: true
